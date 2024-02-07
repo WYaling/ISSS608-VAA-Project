@@ -4,7 +4,7 @@ project:
 website:
   title: "ISSS608-VAA-Project"
   navbar:
-    left:
+    right:
       - href: index.qmd
         text: Home
       - about.qmd
@@ -16,4 +16,5 @@ format:
     toc: true
 
 editor: visual
+
 
