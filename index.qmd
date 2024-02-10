@@ -1,5 +1,7 @@
 ---
-title: "Project by Group 7"
+title: "How much is your HDB valued ?"
 ---
 
-This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications.
+This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications, created by group 7.
+
+![](images/IsItTimeToSellYourHDBFalt.png){fig-align="center"}

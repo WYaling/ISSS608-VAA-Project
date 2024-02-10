@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Gao Ya &amp; Wang Yaling">
+<meta name="dcterms.date" content="2024-02-11">
 
-<title>How much is your HDB valued ?</title>
+<title>How Much is Your HDB Valued?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/NavBar_logo.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/NavBar_logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -79,8 +81,8 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/NavBar_logo.png" alt="" class="navbar-logo">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/NavBar_logo.png" alt="" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -90,17 +92,17 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./Proposal/Proposal.html"> 
+    <a class="nav-link active" href="../Proposal/Proposal.html" aria-current="page"> 
 <span class="menu-text">Proposal</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">Team</span></a>
   </li>  
 </ul>
@@ -115,21 +117,47 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#project-overview" id="toc-project-overview" class="nav-link active" data-scroll-target="#project-overview">1. Project Overview</a></li>
+  <li><a href="#motivation-behind-the-tasks" id="toc-motivation-behind-the-tasks" class="nav-link" data-scroll-target="#motivation-behind-the-tasks">2. Motivation Behind the Tasks</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">3. Data Source</a></li>
+  <li><a href="#proposed-methodology" id="toc-proposed-methodology" class="nav-link" data-scroll-target="#proposed-methodology">4. Proposed Methodology</a>
+  <ul class="collapse">
+  <li><a href="#influential-factors-on-hdb-resale-prices" id="toc-influential-factors-on-hdb-resale-prices" class="nav-link" data-scroll-target="#influential-factors-on-hdb-resale-prices">4.1 Influential Factors on HDB Resale Prices</a></li>
+  <li><a href="#predicting-price-trends" id="toc-predicting-price-trends" class="nav-link" data-scroll-target="#predicting-price-trends">4.2 Predicting Price Trends</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">How much is your HDB valued ?</h1>
+<h1 class="title">How Much is Your HDB Valued?</h1>
+<p class="subtitle lead">Exploring Influential Factors on HDB Resale Prices and Predicting Price Trends</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Gao Ya &amp; Wang Yaling </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 11, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -139,14 +167,113 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications, created by group 7.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/IsItTimeToSellYourHDBFalt.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="images/hdbresale.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="303"></p>
 </figure>
 </div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/hdb.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="664"></p>
+</figure>
+</div>
+<section id="project-overview" class="level1">
+<h1>1. Project Overview</h1>
+<p>In Singapore, the real estate market, especially the resale market of Housing and Development Board (HDB) flats, is closely monitored. Changes in resale flat prices have significant implications for residents, investors, and policymakers.</p>
+<p>According to HDB data, resale flat prices increased by 4.8% in 2023, a slower growth compared to the 10.4% increase in 2022. Factors such as government policies and shifting buyer preferences may have influenced this trend.</p>
+<p>Despite a decline in resale market transactions, HDB resale flat prices remain resilient, with some properties fetching high prices. Competition from other housing options, like Build-to-Order flats, may impact demand.</p>
+<p>Understanding the factors affecting HDB resale flat prices and predicting future trends is crucial for stakeholders. This project aims to analyze market influences and use machine learning to forecast prices, providing valuable insights.</p>
+</section>
+<section id="motivation-behind-the-tasks" class="level1">
+<h1>2. Motivation Behind the Tasks</h1>
+<p>This project aims to understand and predict trends in Housing and Development Board (HDB) resale prices in Singapore’s real estate market. It’s crucial for homebuyers to make informed decisions, for current owners to assess property value accurately, and for investors to optimize their portfolios. Policymakers also rely on this data to formulate effective housing policies promoting market stability and affordability. Ultimately, this project seeks to empower stakeholders with actionable insights, contributing to a more transparent and efficient real estate market in Singapore.</p>
+</section>
+<section id="data-source" class="level1">
+<h1>3. Data Source</h1>
+<p>Two data sets will be used in this project:</p>
+<ol type="1">
+<li>“<a href="https://www.kaggle.com/datasets/syrahmadi/resale-hdb-flat-prices-2000-2022">resale-flat-prices-based-on-registration-date-from-jan-2010-to-Jan-2024.csv</a>” is sourced from <a href="https://www.kaggle.com/">Kaggle</a>.</li>
+<li>“<a href="https://beta.data.gov.sg/collections/187/datasets/d_67966e5fd5dce14cf9fa5f0bc5164faf/view">Number_of_Sold_and_Rented_HDB_Residential_Units.csv</a>” is sourced from <a href="https://beta.data.gov.sg/">DATA.GOV.SG</a>.</li>
+</ol>
+<p>Overview of the datasets:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Datasets.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="proposed-methodology" class="level1">
+<h1>4. Proposed Methodology</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Methodology Overview.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<section id="influential-factors-on-hdb-resale-prices" class="level2">
+<h2 class="anchored" data-anchor-id="influential-factors-on-hdb-resale-prices">4.1 Influential Factors on HDB Resale Prices</h2>
+<p><strong>Exploratory Data Analysis(EDA) via Data Visualization</strong></p>
+<p>Exploratory Data Analysis (EDA) is a crucial step in understanding the structure, patterns, and relationships within a dataset. Data visualization plays a significant role in EDA as it allows us to visually explore the data, identify trends, patterns, outliers, and relationships between variables. Here’s a general outline of the EDA process via data visualization for the provided dataset:</p>
+<ul>
+<li><p><strong>Data Cleaning and Preprocessing:</strong></p>
+<ul>
+<li>Handle missing values: Check for missing values in each column and decide how to handle them (e.g., imputation, deletion).</li>
+<li>Data type conversion: Ensure that data types are appropriate for analysis (e.g., converting categorical variables to categorical data type).</li>
+<li>Check for duplicates: Identify and remove any duplicate records if present.</li>
+</ul></li>
+<li><p><strong>Univariate Analysis:</strong></p>
+<ul>
+<li>univariate analysis examines individual variables to understand their distributions. For numerical variables such as floor area, remaining lease, and resale price, histograms are useful to visualize their spread and skewness. Categorical variables like flat type and location can be analyzed using bar plots to show frequency counts.</li>
+</ul></li>
+<li><p><strong>Bivariate Analysis:</strong></p>
+<ul>
+<li>Scatter plots: Analyze the relationship between numerical variables like resale_price and floor_area_sqm or remaining_lease to understand if there’s any correlation.</li>
+<li>Box plots: Compare the distribution of resale_price across different categories like flat_type or location to identify any variations or outliers.</li>
+<li>Heatmaps or Correlation plots: Visualize the correlation matrix between numerical variables to identify correlations among them.</li>
+</ul></li>
+<li><p><strong>Pattern analysis</strong>&nbsp;</p>
+<ul>
+<li>Temporal analysis focuses on understanding trends over time. Time series plots can reveal patterns in resale prices over months, while heatmaps or line plots display variation across different time periods and locations.</li>
+<li>Geospatial analysis adds a spatial dimension to the exploration. Plotting resale prices on a map allows visualization of spatial distribution and identification of any regional patterns or clusters.</li>
+</ul></li>
+</ul>
+<p>The dataset on resale flat prices based on registration date encompasses various factors that influence property resale prices. Given the complexity of the real estate market, which is subject to fluctuations influenced by factors such as economic conditions, location, and property characteristics, conducting sensitivity analysis through visualization is paramount.&nbsp;</p>
+<p>By considering variables such as the trend in resale prices over time, the impact of location on prices, and potential outliers or influential data points, visualizing the dataset can facilitate the identification of key insights. This analysis may include examining the effects of market trends, government policies related to housing, and other socio-economic factors on resale prices. This approach enables informed decision-making for individuals considering property investment.</p>
+</section>
+<section id="predicting-price-trends" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-price-trends">4.2 Predicting Price Trends</h2>
+<p>Through the proposed methodology outlined below, we aim to develop accurate and reliable predictive models capable of effectively forecasting HDB resale flat prices, thus providing actionable insights to stakeholders and facilitating informed decision-making in the Singapore real estate market.</p>
+<ol type="1">
+<li><strong>Data Preparation:</strong>
+<ul>
+<li><strong>Dataset Splitting:</strong> Divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing.</li>
+<li><strong>Feature Selection:</strong> Utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.</li>
+</ul></li>
+<li><strong>Model Development:</strong>
+<ul>
+<li><strong>Exploring Machine Learning Algorithms:</strong> Explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices.</li>
+<li><strong>Model Training:</strong> Train the models on the training set using historical data and evaluate them using techniques like cross-validation.</li>
+</ul></li>
+<li><strong>Model Evaluation:</strong>
+<ul>
+<li><strong>Metric Selection:</strong> Use metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.</li>
+</ul></li>
+<li><strong>Model Interpretation:</strong>
+<ul>
+<li><strong>Interpretability Analysis:</strong> Analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights.</li>
+</ul></li>
+<li><strong>Validation and Improvement:</strong>
+<ul>
+<li><strong>Model Validation:</strong> Validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.</li>
+</ul></li>
+<li><strong>Prediction:</strong>
+<ul>
+<li><strong>Model Application:</strong> use validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.</li>
+</ul></li>
+</ol>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

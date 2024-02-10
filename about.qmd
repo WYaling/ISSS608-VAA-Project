@@ -1,9 +1,7 @@
 ---
-title: "About"
+title: "Members from Group7 "
 ---
 
-About this site
+**Gao Ya & Wang Yaling**
 
-```{r}
-1 + 1
-```
+![](images/Two-Best-Friends-Female.png){fig-align="left" width="329"}
