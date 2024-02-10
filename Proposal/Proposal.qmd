@@ -7,7 +7,7 @@ date: "2024-2-11"
 
 ![](images/hdbresale.png){fig-align="center" width="303"}
 
-![](images/hdb.jpeg){fig-align="center" width="664"}
+![](images/hdb.jpeg){fig-align="center" width="693"}
 
 # 1. Project Overview
 
@@ -36,7 +36,7 @@ Overview of the datasets:
 
 # 4. Proposed Methodology
 
-![](images/Methodology Overview.png){fig-align="center"}
+![](images/Methodology%20Overview.png){fig-align="center"}
 
 ## 4.1 Influential Factors on HDB Resale Prices
 
@@ -73,17 +73,22 @@ By considering variables such as the trend in resale prices over time, the impac
 
 Through the proposed methodology outlined below, we aim to develop accurate and reliable predictive models capable of effectively forecasting HDB resale flat prices, thus providing actionable insights to stakeholders and facilitating informed decision-making in the Singapore real estate market.
 
-1.  **Data Preparation:**
-    -   **Dataset Splitting:** Divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing.
-    -   **Feature Selection:** Utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.
-2.  **Model Development:**
-    -   **Exploring Machine Learning Algorithms:** Explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices.
-    -   **Model Training:** Train the models on the training set using historical data and evaluate them using techniques like cross-validation.
-3.  **Model Evaluation:**
-    -   **Metric Selection:** Use metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.
-4.  **Model Interpretation:**
-    -   **Interpretability Analysis:** Analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights.
-5.  **Validation and Improvement:**
-    -   **Model Validation:** Validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.
-6.  **Prediction:**
-    -   **Model Application:** use validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.
+1.  **Data Preparation**
+
+First, divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing. Then, utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.
+
+2.  **Model Development**
+
+First, explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices. Then, train the models on the training set using historical data and evaluate them using techniques like cross-validation.
+
+3.  **Model Evaluation**
+
+Use metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.
+
+4.  **Model Interpretation**
+
+First, analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights. Then, validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.
+
+5.  **Prediction**
+
+Use validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.
