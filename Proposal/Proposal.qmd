@@ -92,3 +92,21 @@ First, analyze the interpretability of models, which is crucial for understandin
 5.  **Prediction**
 
 Use validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.
+
+# 5. Rshiny Demo
+
+Our R Shiny app primarily serves to acquaint users with the HDB resale market in Singapore from various angles and assist them in predicting the price of their own flat should they wish to sell it.
+
+The images below depict the ideal R Shiny app that we aim to develop.
+
+![](images/Home.png){width="300"}
+
+![](images/Services.png){width="300"}
+
+![](images/Philosophy.png){width="300"}
+
+![](images/Feedback.png){width="300"}
+
+![](images/Contact.png){width="300"}
+
+![](images/About.png){width="300"}
