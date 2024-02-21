@@ -31,7 +31,7 @@ format:
   html:
     theme: yeti
     css: styles.css
-    mainfont: Calibri
+    mainfont: Arial
     toc: true
     linestretch: 1.5
     code-block-bg: true
