@@ -2,24 +2,40 @@ project:
   type: website
 
 website:
-  favicon: "images/NavBar_logo.png"
-  navbar:
-    logo: "images/NavBar_logo.png"
-    
-    right:
+  favicon: "images/Website_logo.png"
+  sidebar:
+    title: "ISSS608 Project"
+    logo: "images/hdbresale.png"
+    style: "docked"
+    search: true
+    background: info
+    foreground: light
+    contents:
       - href: index.qmd
-        text: Home
+        text: Introduction
       - text: "Team"
         href: about.qmd
-    left:
       - text: "Proposal"
         href: "Proposal/Proposal.html"
 
 format:
   html:
-    theme: united
+    theme: yeti
     css: styles.css
+    mainfont: Calibri
     toc: true
+    linestretch: 1.5
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-line-numbers: true
+    grid:
+      sidebar-width: 300px
+      body-width: 900px
+      margin-width: 300px
+      gutter-width: 1.5rem
+
+
+
 
 editor: visual
 

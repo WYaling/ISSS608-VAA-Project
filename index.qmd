@@ -1,5 +1,6 @@
 ---
 title: "How much is your HDB valued ?"
+background-image: url('images/HDB.jpg')
 ---
 
 This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications, created by group 7.

@@ -5,8 +5,6 @@ author: "Gao Ya & Wang Yaling"
 date: "2024-2-11"
 ---
 
-![](images/hdbresale.png){fig-align="center" width="303"}
-
 ![](images/hdb.jpeg){fig-align="center" width="693"}
 
 # 1. Project Overview
