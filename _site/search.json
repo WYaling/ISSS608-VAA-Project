@@ -1,5 +1,35 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "How much is your HDB flat valued ?",
+    "section": "",
+    "text": "Exploring Influential Factors on HDB Resale Prices and Predicting Price Trends\nThis is the website for showcasing group project prototype of ISSS608 Visual Analytic and Applications.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "",
+    "section": "",
+    "text": "Course: ISSS608 Visual Analytics and Applications\nTask: Group Project\nTeam: Group 7\nMember: GAO Ya & WANG Yaling",
+    "crumbs": [
+      "Team"
+    ]
+  },
+  {
+    "objectID": "Meeting_Minutes/Meeting_Minutes.html",
+    "href": "Meeting_Minutes/Meeting_Minutes.html",
+    "title": "Meeting Minutes",
+    "section": "",
+    "text": "Meeting Minutes 1\nMeeting Minutes 2",
+    "crumbs": [
+      "Meeting Minutes"
+    ]
+  },
+  {
     "objectID": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
     "href": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
     "title": "How Much is Your HDB Valued?",
@@ -17,26 +47,6 @@
     "text": "4.2 Predicting Price Trends\nThrough the proposed methodology outlined below, we aim to develop accurate and reliable predictive models capable of effectively forecasting HDB resale flat prices, thus providing actionable insights to stakeholders and facilitating informed decision-making in the Singapore real estate market.\n\nData Preparation\n\nFirst, divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing. Then, utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.\n\nModel Development\n\nFirst, explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices. Then, train the models on the training set using historical data and evaluate them using techniques like cross-validation.\n\nModel Evaluation\n\nUse metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.\n\nModel Interpretation\n\nFirst, analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights. Then, validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.\n\nPrediction\n\nUse validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.",
     "crumbs": [
       "Proposal"
-    ]
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Members from Group7",
-    "section": "",
-    "text": "Gao Ya & Wang Yaling",
-    "crumbs": [
-      "Team"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "How much is your HDB valued ?",
-    "section": "",
-    "text": "This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications, created by group 7.",
-    "crumbs": [
-      "Introduction"
     ]
   }
 ]

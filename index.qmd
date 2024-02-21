@@ -1,8 +1,9 @@
 ---
-title: "How much is your HDB valued ?"
-background-image: url('images/HDB.jpg')
+title: "How much is your HDB flat valued ?"
 ---
 
-This is the website for showcasing group project work of ISSS608 Visual Analytic and Applications, created by group 7.
+**Exploring Influential Factors on HDB Resale Prices and Predicting Price Trends**
+
+This is the website for showcasing group project prototype of ISSS608 Visual Analytic and Applications.
 
 ![](images/IsItTimeToSellYourHDBFalt.png){fig-align="center"}

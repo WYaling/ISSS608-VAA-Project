@@ -1,7 +1,12 @@
----
-title: "Members from Group7 "
----
+***Course:** ISSS608 Visual Analytics and Applications*
 
-**Gao Ya & Wang Yaling**
+***Task:** Group Project*
+
+***Team:** Group 7*
+
+***Member:** GAO Ya & WANG Yaling*
 
 ![](images/Two-Best-Friends-Female.png){fig-align="left" width="329"}
+
+::: {style="column-count: 2"}
+:::
