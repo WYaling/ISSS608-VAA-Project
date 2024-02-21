@@ -6,6 +6,10 @@ website:
   back-to-top-navigation: true
   page-navigation: true
   sidebar:
+    tools:
+      - icon: github
+        text: "Github"
+        href: https://github.com/WYaling/ISSS608-VAA-Project
     logo: "images/hdbresale.png"
     style: "docked"
     search: true
