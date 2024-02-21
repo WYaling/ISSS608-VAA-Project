@@ -1,10 +1,30 @@
 [
   {
+    "objectID": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
+    "href": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
+    "title": "How Much is Your HDB Valued?",
+    "section": "4.1 Influential Factors on HDB Resale Prices",
+    "text": "4.1 Influential Factors on HDB Resale Prices\nExploratory Data Analysis(EDA) via Data Visualization\nExploratory Data Analysis (EDA) is a crucial step in understanding the structure, patterns, and relationships within a dataset. Data visualization plays a significant role in EDA as it allows us to visually explore the data, identify trends, patterns, outliers, and relationships between variables. Here’s a general outline of the EDA process via data visualization for the provided dataset:\n\nData Cleaning and Preprocessing:\n\nHandle missing values: Check for missing values in each column and decide how to handle them (e.g., imputation, deletion).\nData type conversion: Ensure that data types are appropriate for analysis (e.g., converting categorical variables to categorical data type).\nCheck for duplicates: Identify and remove any duplicate records if present.\n\nUnivariate Analysis:\n\nunivariate analysis examines individual variables to understand their distributions. For numerical variables such as floor area, remaining lease, and resale price, histograms are useful to visualize their spread and skewness. Categorical variables like flat type and location can be analyzed using bar plots to show frequency counts.\n\nBivariate Analysis:\n\nScatter plots: Analyze the relationship between numerical variables like resale_price and floor_area_sqm or remaining_lease to understand if there’s any correlation.\nBox plots: Compare the distribution of resale_price across different categories like flat_type or location to identify any variations or outliers.\nHeatmaps or Correlation plots: Visualize the correlation matrix between numerical variables to identify correlations among them.\n\nPattern analysis \n\nTemporal analysis focuses on understanding trends over time. Time series plots can reveal patterns in resale prices over months, while heatmaps or line plots display variation across different time periods and locations.\nGeospatial analysis adds a spatial dimension to the exploration. Plotting resale prices on a map allows visualization of spatial distribution and identification of any regional patterns or clusters.\n\n\nThe dataset on resale flat prices based on registration date encompasses various factors that influence property resale prices. Given the complexity of the real estate market, which is subject to fluctuations influenced by factors such as economic conditions, location, and property characteristics, conducting sensitivity analysis through visualization is paramount. \nBy considering variables such as the trend in resale prices over time, the impact of location on prices, and potential outliers or influential data points, visualizing the dataset can facilitate the identification of key insights. This analysis may include examining the effects of market trends, government policies related to housing, and other socio-economic factors on resale prices. This approach enables informed decision-making for individuals considering property investment.",
+    "crumbs": [
+      "Proposal"
+    ]
+  },
+  {
+    "objectID": "Proposal/Proposal.html#predicting-price-trends",
+    "href": "Proposal/Proposal.html#predicting-price-trends",
+    "title": "How Much is Your HDB Valued?",
+    "section": "4.2 Predicting Price Trends",
+    "text": "4.2 Predicting Price Trends\nThrough the proposed methodology outlined below, we aim to develop accurate and reliable predictive models capable of effectively forecasting HDB resale flat prices, thus providing actionable insights to stakeholders and facilitating informed decision-making in the Singapore real estate market.\n\nData Preparation\n\nFirst, divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing. Then, utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.\n\nModel Development\n\nFirst, explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices. Then, train the models on the training set using historical data and evaluate them using techniques like cross-validation.\n\nModel Evaluation\n\nUse metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.\n\nModel Interpretation\n\nFirst, analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights. Then, validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.\n\nPrediction\n\nUse validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.",
+    "crumbs": [
+      "Proposal"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "How much is your HDB flat valued ?",
     "section": "",
-    "text": "Exploring Influential Factors on HDB Resale Prices and Predicting Price Trends\nThis website is for showcasing group project prototype of ISSS608 Visual Analytic and Applications.",
+    "text": "Exploring Influential Factors on HDB Resale Prices and Predicting Price Trends\nThis website is for showcasing group project prototype of ISSS608 Visual Analytic and Applications.\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "Introduction"
     ]
@@ -24,29 +44,9 @@
     "href": "Meeting_Minutes/Meeting_Minutes.html",
     "title": "Meeting Minutes",
     "section": "",
-    "text": "Meeting Minutes 1\nMeeting Minutes 2",
+    "text": "Meeting Minutes 1\nMeeting Minutes 2\n\n\n\n Back to top",
     "crumbs": [
       "Meeting Minutes"
-    ]
-  },
-  {
-    "objectID": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
-    "href": "Proposal/Proposal.html#influential-factors-on-hdb-resale-prices",
-    "title": "How Much is Your HDB Valued?",
-    "section": "4.1 Influential Factors on HDB Resale Prices",
-    "text": "4.1 Influential Factors on HDB Resale Prices\nExploratory Data Analysis(EDA) via Data Visualization\nExploratory Data Analysis (EDA) is a crucial step in understanding the structure, patterns, and relationships within a dataset. Data visualization plays a significant role in EDA as it allows us to visually explore the data, identify trends, patterns, outliers, and relationships between variables. Here’s a general outline of the EDA process via data visualization for the provided dataset:\n\nData Cleaning and Preprocessing:\n\nHandle missing values: Check for missing values in each column and decide how to handle them (e.g., imputation, deletion).\nData type conversion: Ensure that data types are appropriate for analysis (e.g., converting categorical variables to categorical data type).\nCheck for duplicates: Identify and remove any duplicate records if present.\n\nUnivariate Analysis:\n\nunivariate analysis examines individual variables to understand their distributions. For numerical variables such as floor area, remaining lease, and resale price, histograms are useful to visualize their spread and skewness. Categorical variables like flat type and location can be analyzed using bar plots to show frequency counts.\n\nBivariate Analysis:\n\nScatter plots: Analyze the relationship between numerical variables like resale_price and floor_area_sqm or remaining_lease to understand if there’s any correlation.\nBox plots: Compare the distribution of resale_price across different categories like flat_type or location to identify any variations or outliers.\nHeatmaps or Correlation plots: Visualize the correlation matrix between numerical variables to identify correlations among them.\n\nPattern analysis \n\nTemporal analysis focuses on understanding trends over time. Time series plots can reveal patterns in resale prices over months, while heatmaps or line plots display variation across different time periods and locations.\nGeospatial analysis adds a spatial dimension to the exploration. Plotting resale prices on a map allows visualization of spatial distribution and identification of any regional patterns or clusters.\n\n\nThe dataset on resale flat prices based on registration date encompasses various factors that influence property resale prices. Given the complexity of the real estate market, which is subject to fluctuations influenced by factors such as economic conditions, location, and property characteristics, conducting sensitivity analysis through visualization is paramount. \nBy considering variables such as the trend in resale prices over time, the impact of location on prices, and potential outliers or influential data points, visualizing the dataset can facilitate the identification of key insights. This analysis may include examining the effects of market trends, government policies related to housing, and other socio-economic factors on resale prices. This approach enables informed decision-making for individuals considering property investment.",
-    "crumbs": [
-      "Proposal"
-    ]
-  },
-  {
-    "objectID": "Proposal/Proposal.html#predicting-price-trends",
-    "href": "Proposal/Proposal.html#predicting-price-trends",
-    "title": "How Much is Your HDB Valued?",
-    "section": "4.2 Predicting Price Trends",
-    "text": "4.2 Predicting Price Trends\nThrough the proposed methodology outlined below, we aim to develop accurate and reliable predictive models capable of effectively forecasting HDB resale flat prices, thus providing actionable insights to stakeholders and facilitating informed decision-making in the Singapore real estate market.\n\nData Preparation\n\nFirst, divide the available dataset into training, validation, and testing sets with a typical split of 80% for training, 10% for validation, and 10% for testing. Then, utilize feature selection techniques to identify the most influential variables affecting HDB resale flat prices, aiding in simplifying analysis and enhancing model accuracy.\n\nModel Development\n\nFirst, explore various machine learning algorithms such as regression analysis, decision trees, and ensemble methods to develop models for predicting HDB resale flat prices. Then, train the models on the training set using historical data and evaluate them using techniques like cross-validation.\n\nModel Evaluation\n\nUse metrics such as Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and R-squared to evaluate the performance of predictive models.\n\nModel Interpretation\n\nFirst, analyze the interpretability of models, which is crucial for understanding the driving factors behind HDB resale flat prices. Employ techniques like feature importance analysis and partial dependence plots to interpret models and identify key insights. Then, validate predictive models using the validation set to ensure their robustness and generalization ability. Make necessary improvements or adjustments based on validation results to enhance model performance.\n\nPrediction\n\nUse validated models to forecast future trends in HDB resale flat prices. These predictions will provide valuable insights to stakeholders, enabling them to make informed decisions in the dynamic real estate market environment.",
-    "crumbs": [
-      "Proposal"
     ]
   }
 ]

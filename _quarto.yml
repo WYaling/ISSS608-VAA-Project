@@ -3,6 +3,8 @@ project:
 
 website:
   favicon: "images/Website_logo.png"
+  back-to-top-navigation: true
+  page-navigation: true
   sidebar:
     logo: "images/hdbresale.png"
     style: "docked"
