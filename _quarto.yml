@@ -32,6 +32,7 @@ format:
     theme: yeti
     css: styles.css
     mainfont: Arial
+    fontsize: 1.2em
     toc: true
     linestretch: 1.5
     code-block-bg: true
