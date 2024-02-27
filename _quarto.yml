@@ -31,7 +31,7 @@ format:
   html:
     theme: yeti
     css: styles.css
-    mainfont: Arial
+    mainfont: Century Gothic
     fontsize: 1em
     toc: true
     linestretch: 1.5
