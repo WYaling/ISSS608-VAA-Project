@@ -29,7 +29,7 @@ website:
 
 format:
   html:
-    theme: lux
+    theme: flatly
     css: styles.css
     mainfont: Arial
     fontsize: 1em
