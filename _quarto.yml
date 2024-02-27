@@ -13,7 +13,7 @@ website:
     logo: "images/hdbresale.png"
     style: "docked"
     search: true
-    background: info
+    background: "#7986CB"
     foreground: light
     contents:
       - href: index.qmd
@@ -29,9 +29,9 @@ website:
 
 format:
   html:
-    theme: yeti
+    theme: lux
     css: styles.css
-    mainfont: Century Gothic
+    mainfont: Arial
     fontsize: 1em
     toc: true
     linestretch: 1.5
