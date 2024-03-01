@@ -10,11 +10,16 @@ website:
       - icon: github
         text: "Github"
         href: https://github.com/WYaling/ISSS608-VAA-Project
+      - icon: house-fill
+        href: https://isss608-vaa-project-group7.netlify.app/
+        text: "Home"
     logo: "images/hdbresale.png"
     style: "docked"
     search: true
     background: "#7986CB"
     foreground: light
+    align: center
+  
     contents:
       - href: index.qmd
         text: Introduction
@@ -32,7 +37,7 @@ format:
     theme: flatly
     css: styles.css
     mainfont: Arial
-    fontsize: 1em
+    fontsize: 1.3em
     toc: true
     linestretch: 1.5
     code-block-bg: true
