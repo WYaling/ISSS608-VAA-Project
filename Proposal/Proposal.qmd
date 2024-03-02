@@ -25,12 +25,15 @@ This project aims to understand and predict trends in Housing and Development Bo
 
 Two data sets will be used in this project:
 
-1.  “[resale-flat-prices-based-on-registration-date-from-jan-2010-to-Jan-2024.csv](https://www.kaggle.com/datasets/syrahmadi/resale-hdb-flat-prices-2000-2022)” is sourced from [Kaggle](https://www.kaggle.com/).
-2.  "[Number_of_Sold_and_Rented_HDB_Residential_Units.csv](https://beta.data.gov.sg/collections/187/datasets/d_67966e5fd5dce14cf9fa5f0bc5164faf/view)" is sourced from [DATA.GOV.SG](https://beta.data.gov.sg/).
+“[resale-flat-prices-based-on-registration-date-from-jan-2010-to-Jan-2024.csv](https://www.kaggle.com/datasets/syrahmadi/resale-hdb-flat-prices-2000-2022)” is sourced from [Kaggle](https://www.kaggle.com/).
 
 Overview of the datasets:
 
-![](images/Datasets.png){fig-align="center"}
+![](images/Dataset.png){fig-align="center" width="856"}
+
+inside each CSV file, the variables are:
+
+![](images/resale-flat-prices-based-on-registration-date.png){width="566"}
 
 # 4. Proposed Methodology
 
