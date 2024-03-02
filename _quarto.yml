@@ -29,6 +29,8 @@ website:
         href: "Meeting_Minutes/Meeting_Minutes.html"
       - text: "Proposal"
         href: "Proposal/Proposal.html"
+      - text: "Data Preparation"
+        href: "Data_preparation/Data_Preparation.html"
 
         
 
@@ -37,19 +39,17 @@ format:
     theme: flatly
     css: styles.css
     mainfont: Arial
-    fontsize: 1.3em
+    fontsize: 1.2em
     toc: true
     linestretch: 1.5
     code-block-bg: true
-    code-block-border-left: "#31BAE9"
+    code-block-border-left: "#7986CB"
     code-line-numbers: true
     grid:
       sidebar-width: 220px
       body-width: 960px
       margin-width: 220px
       gutter-width: 1.5rem
-
-
 
 
 editor: visual
