@@ -1,0 +1,279 @@
+---
+title: "HDB Resale Dataset: Data Preparation"
+author: "Gao Ya & Wang Yaling"
+date: March 2, 2024
+date-modified: 'last-modified'
+---
+
+
+# 1 Getting Started
+
+## 1.1 Download Data
+
+The data is sourced from the [Kaggle](https://www.kaggle.com/) dataset "[Resale HDB Flat Prices 2012 - 2023](https://www.kaggle.com/datasets/syrahmadi/resale-hdb-flat-prices-2000-2022?resource=download)", which comprises four CSV files as follows:
+
+![](images/Dataset.png){fig-align="center"}
+
+The research for this project will be limited to the recent 10 years, from 01/01/2013 to 31/12/2023. Therefore, the required data files are the following three:
+
+-   resale-flat-prices-based-on-registration-date-from-mar-2012-to-dec-2014.csv
+
+-   resale-flat-prices-based-on-registration-date-from-jan-2015-to-dec-2016.csv
+
+-   ResaleflatpricesbasedonregistrationdatefromJan2017onwards.csv
+
+## 1.2 Load R Packages
+
+R packages required:
+
+-   **tidyverse** for processing datasets, inside this package we will use:
+
+    -   **readr** for reading CSV files
+
+    -   **dplyr** for operations such as filtering, selecting, transforming, summarizing, and joining data
+
+-   **DT** for the creation of interactive HTML tables from R data frames
+
+-   **summarytools** for generating a descriptive statistical summary of the data frame
+
+
+```{r}
+pacman::p_load(tidyverse, DT, summarytools)
+```
+
+
+# 2 Data Preparation
+
+## 2.1 Import Data
+
+The necessary .CSV files will be imported as a list of CSV files, then compiled into a single dataframe using R.
+
+First, let's take a look at the three CSV files and check their difference.
+
+::: panel-tabset
+## mar-2012-to-dec-2014
+
+
+```{r}
+#read .csv data files
+data1 <- read.csv("data/resale-flat-prices-based-on-registration-date-from-mar-2012-to-dec-2014.csv")
+glimpse(data1)
+```
+
+
+## jan-2015-to-dec-2016
+
+
+```{r}
+#read .csv data files
+data2 <- read.csv("data/resale-flat-prices-based-on-registration-date-from-jan-2015-to-dec-2016.csv")
+glimpse(data2)
+```
+
+
+## Jan-2017-onwards
+
+
+```{r}
+#read .csv data files
+data3 <- read.csv("data/ResaleflatpricesbasedonregistrationdatefromJan2017onwards.csv")
+glimpse(data3)
+```
+
+:::
+
+::: {style="background-color: #E8EAF6;    border-radius: 10px;    padding: 20px;"}
+**Observation from the above glimpse:**
+
+-   The data file "mar-2012-to-dec-2014" is missing the "remaining_lease" column.
+
+-   The "remaining_lease" column in "jan-2015-to-dec-2016" is of integer data type.
+
+-   The "remaining_lease" column in "Jan-2017-onwards" is of character data type.
+
+-   All other column names and data types are identical across the three data files.
+:::
+
+## 2.2 Merge Data
+
+Before merging the three data files, the following steps need to be performed:
+
+Step 1. Add a column named "remaining_lease" to the "mar-2012-to-dec-2014" data file.
+
+::: callout-tip
+## Formula of the column "remaining_lease"
+
+According to research, the tenure of Singapore HDB properties is 99 years.
+
+Thus, the value of "remaining_lease" is calculated as 99 - (month - lease_commence_date). Note that "month" stands for the date of HDB resale in the datasets.
+:::
+
+Step 2. Delete the original "remaining_lease" column in "jan-2015-to-dec-2016" and "Jan-2017-onwards" data file, and create new "remaining_lease" columns with the same formula as above.
+
+
+```{r}
+# Calculate remaining lease based on the provided formula
+data1 <- data1 %>%
+  mutate(remaining_lease = 99 - (as.numeric(substr(month, 1, 4)) - lease_commence_date))
+
+# delete original remaining_lease column and create a new one
+data2 <- data2 %>%
+  select(-remaining_lease) %>%
+  mutate(remaining_lease = 99 - (as.numeric(substr(month, 1, 4)) - lease_commence_date))
+
+data3 <- data3 %>%
+  select(-remaining_lease) %>%
+  mutate(remaining_lease = 99 - (as.numeric(substr(month, 1, 4)) - lease_commence_date))
+```
+
+
+Then, we can start merging the three files together.
+
+
+```{r}
+# Merge data1, data2, and data3
+combined_data <- bind_rows(data1, data2, data3)
+```
+
+
+## 2.3 Extract Data
+
+To be able to extract the data from 2013 to 2023, we need to do the follow steps:
+
+Step 1. Make sure the data type of column "month" is date-type.
+
+Step 2. Extract data in 2013-2023.
+
+
+```{r}
+# convert data type of "month" column to date
+combined_data$month <- as.Date(paste0(combined_data$month, "-01"), format = "%Y-%m-%d")
+
+# Extract data in 2013-2023
+extract_data <- combined_data %>%
+  filter(month >= as.Date("2013-01-01") & month <= as.Date("2023-12-31"))
+
+```
+
+
+## 2.4 Check Data Health
+
+Now that we have a single dataframe, we first check the health of the dataframe by:
+
+using `glimpse()` to look at the structure of the dataframe, data types of the columns, and some values of the dataframe,
+
+using `datatable()` from the DT package to view the dataframe more interactively,
+
+using `duplicate()` to check the dataframe for any duplicated entries using duplicate(),
+
+using `summary()` to check the distribution of values,
+
+using `descr()` to show the descriptive statistics of non-numerical variables.
+
+::: panel-tabset
+## glimpse()
+
+
+```{r}
+glimpse(extract_data)
+```
+
+
+## datatable()
+
+
+```{r}
+datatable(head(extract_data), 
+          class= "compact",
+          rownames = FALSE,
+          width="100%", 
+          options = list(pageLength = 10,scrollX=T))
+```
+
+
+## duplicate()
+
+
+```{r}
+str(extract_data[duplicated(extract_data),])
+```
+
+
+## summary()
+
+
+```{r}
+summary(extract_data)
+```
+
+
+## descr()
+
+
+```{r}
+descr(extract_data)
+```
+
+:::
+
+::: {style="background-color: #E8EAF6;    border-radius: 10px;    padding: 20px;"}
+**Observation from the above:**
+
+-   From `glimpse()`, we can see the data types of all variables. There are four numerical variables: *floor_area_sqm, lease_commence_date, resale_price, remaining_lease*. Seven categorical variables: *month, town, flat_type, block, street_name, storey_range, flat_model*. Variable *town, flat_type, block, street_name, storey_range, flat_model* are all character-type.
+
+-   From `glimpse()`, we can see that there are a total of 238,519 rows and 11 columns. Combining the `Length` of categorical variables seen in `summary()` and the `N.Valid` from `descr()` for numerical variables, we find that each variable has 238,519 values, indicating that there are no missing values in this dataframe.
+
+-   From `duplicate()`, we can see that there are 610 records have duplicate rows. We speculate that it is caused by duplicate data entry.
+:::
+
+After the above observations, we are going to process the data to make it more suitable for our subsequent analysis.
+
+Step 1. Convert all character-type variables to factor-type variables so that we can analyze the distribution of the different values of categorical variables in subsequent analyses.
+
+
+```{r}
+# Convert all character-type variables to factor-type variables.
+extract_data <- as.data.frame(lapply(extract_data, function(x) {
+  if(is.character(x)) {
+    return(factor(x))
+  } else {
+    return(x)
+  }
+}))
+```
+
+
+Step 2. Remove all the duplicate rows.
+
+
+```{r}
+extract_data <- distinct(extract_data)
+```
+
+
+Check duplicates again by the code chunk below:
+
+
+```{r}
+str(extract_data[duplicated(extract_data),])
+```
+
+
+# 3 Save Data
+
+Let's take a look again at the processed dataframe.
+
+
+```{r}
+glimpse(extract_data)
+datatable(head(extract_data))
+```
+
+
+In the end, we will save this dataframe as a rds object for faster loading of data in the future.
+
+
+```{r}
+write_rds(extract_data, "data/resale_hdb.rds")
+```
+
