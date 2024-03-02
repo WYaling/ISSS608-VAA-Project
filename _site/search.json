@@ -156,7 +156,7 @@
     "href": "Data_preparation/Data_Preparation.html#extract-data",
     "title": "HDB Resale Dataset: Data Preparation",
     "section": "2.3 Extract Data",
-    "text": "2.3 Extract Data\nTo be able to extract the data from 2013 to 2023, we need to do the follow steps:\nStep 1. Make sure the data type of column “month” is date-type.\nStep 2. Extract data in 2013-2023.\n\n# convert data type of \"month\" column to date\ncombined_data$month &lt;- as.Date(paste0(combined_data$month, \"-01\"), format = \"%Y-%m-%d\")\n\n# Extract data in 2013-2023\nextract_data &lt;- combined_data %&gt;%\n  filter(month &gt;= as.Date(\"2013-01-01\") & month &lt;= as.Date(\"2023-12-31\"))",
+    "text": "2.3 Extract Data\nTo be able to extract the data from 2013 to 2023, we need to do the follow steps:\nStep 1. Make sure the data type of column “month” is date-type.\nStep 2. Extract data in 2013-2023.\n\n# convert data type of \"month\" column to date\ncombined_data$month &lt;- as.Date(paste0(combined_data$month, \"-01\"), format = \"%Y-%m-%d\")\n\n# Extract data in 2013-2023\nextract_data &lt;- combined_data %&gt;%\n  filter(month &gt;= as.Date(\"2013-01-01\") & month &lt;= as.Date(\"2023-12-31\"))\n\n\n\n\n\n\n\nExplanation of “-01” in the code chunk above\n\n\n\nBy examining the data, we find that the “month” variable is in the format of “Year/Month/01”, for example “2013/1/1”. For every month, the dataset uses the first day to cover all the records in that particular month, so we decided to set the day as 1 when converting to as.Date.",
     "crumbs": [
       "Data Preparation"
     ]

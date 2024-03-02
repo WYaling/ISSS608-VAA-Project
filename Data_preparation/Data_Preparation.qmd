@@ -141,6 +141,12 @@ extract_data <- combined_data %>%
 
 ```
 
+::: {.callout-tip icon="false"}
+## Explanation of "-01" in the code chunk above
+
+By examining the data, we find that the "month" variable is in the format of "Year/Month/01", for example "2013/1/1". For every month, the dataset uses the first day to cover all the records in that particular month, so we decided to set the day as 1 when converting to `as.Date`.
+:::
+
 ## 2.4 Check Data Health
 
 Now that we have a single dataframe, we first check the health of the dataframe by:
