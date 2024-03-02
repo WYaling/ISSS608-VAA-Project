@@ -230,7 +230,14 @@ str(extract_data[duplicated(extract_data),])
 
 # 3 Save Data
 
-We will save this dataframe as a rds object for faster loading of data in the future.
+Let's take a look again at the processed dataframe.
+
+```{r}
+glimpse(extract_data)
+datatable(head(extract_data))
+```
+
+In the end, we will save this dataframe as a rds object for faster loading of data in the future.
 
 ```{r}
 write_rds(extract_data, "data/resale_hdb.rds")

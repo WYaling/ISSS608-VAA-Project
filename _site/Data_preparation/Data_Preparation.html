@@ -464,8 +464,8 @@ $ remaining_lease     &lt;dbl&gt; 66, 64, 63, 72, 72, 65, 66, 66, 65, 66, 66, 65
 <span id="cb13-4"><a href="#cb13-4"></a>          <span class="at">width=</span><span class="st">"100%"</span>, </span>
 <span id="cb13-5"><a href="#cb13-5"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">10</span>,<span class="at">scrollX=</span>T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-d958c496ba57af0b1493" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d958c496ba57af0b1493">{"x":{"filter":"none","vertical":false,"data":[["2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01"],["ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO"],["2 ROOM","2 ROOM","2 ROOM","3 ROOM","3 ROOM","3 ROOM"],["510","314","323","170","174","445"],["ANG MO KIO AVE 8","ANG MO KIO AVE 3","ANG MO KIO AVE 3","ANG MO KIO AVE 4","ANG MO KIO AVE 4","ANG MO KIO AVE 10"],["01 TO 03","01 TO 03","04 TO 06","07 TO 09","01 TO 03","04 TO 06"],[44,44,44,61,60,67],["Improved","Improved","Improved","Improved","Improved","New Generation"],[1980,1978,1977,1986,1986,1979],[253000,270000,283000,305000,320000,325000],[66,64,63,72,72,65]],"container":"<table class=\"compact\">\n  <thead>\n    <tr>\n      <th>month<\/th>\n      <th>town<\/th>\n      <th>flat_type<\/th>\n      <th>block<\/th>\n      <th>street_name<\/th>\n      <th>storey_range<\/th>\n      <th>floor_area_sqm<\/th>\n      <th>flat_model<\/th>\n      <th>lease_commence_date<\/th>\n      <th>resale_price<\/th>\n      <th>remaining_lease<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[6,8,9,10]},{"name":"month","targets":0},{"name":"town","targets":1},{"name":"flat_type","targets":2},{"name":"block","targets":3},{"name":"street_name","targets":4},{"name":"storey_range","targets":5},{"name":"floor_area_sqm","targets":6},{"name":"flat_model","targets":7},{"name":"lease_commence_date","targets":8},{"name":"resale_price","targets":9},{"name":"remaining_lease","targets":10}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-be22cdc7ed3e81187177" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-be22cdc7ed3e81187177">{"x":{"filter":"none","vertical":false,"data":[["2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01"],["ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO"],["2 ROOM","2 ROOM","2 ROOM","3 ROOM","3 ROOM","3 ROOM"],["510","314","323","170","174","445"],["ANG MO KIO AVE 8","ANG MO KIO AVE 3","ANG MO KIO AVE 3","ANG MO KIO AVE 4","ANG MO KIO AVE 4","ANG MO KIO AVE 10"],["01 TO 03","01 TO 03","04 TO 06","07 TO 09","01 TO 03","04 TO 06"],[44,44,44,61,60,67],["Improved","Improved","Improved","Improved","Improved","New Generation"],[1980,1978,1977,1986,1986,1979],[253000,270000,283000,305000,320000,325000],[66,64,63,72,72,65]],"container":"<table class=\"compact\">\n  <thead>\n    <tr>\n      <th>month<\/th>\n      <th>town<\/th>\n      <th>flat_type<\/th>\n      <th>block<\/th>\n      <th>street_name<\/th>\n      <th>storey_range<\/th>\n      <th>floor_area_sqm<\/th>\n      <th>flat_model<\/th>\n      <th>lease_commence_date<\/th>\n      <th>resale_price<\/th>\n      <th>remaining_lease<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[6,8,9,10]},{"name":"month","targets":0},{"name":"town","targets":1},{"name":"flat_type","targets":2},{"name":"block","targets":3},{"name":"street_name","targets":4},{"name":"storey_range","targets":5},{"name":"floor_area_sqm","targets":6},{"name":"flat_model","targets":7},{"name":"lease_commence_date","targets":8},{"name":"resale_price","targets":9},{"name":"remaining_lease","targets":10}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -595,9 +595,33 @@ N: 238519
 </section>
 <section id="save-data" class="level1">
 <h1>3 Save Data</h1>
-<p>We will save this dataframe as a rds object for faster loading of data in the future.</p>
+<p>Let’s take a look again at the processed dataframe.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">write_rds</span>(extract_data, <span class="st">"data/resale_hdb.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">glimpse</span>(extract_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 237,909
+Columns: 11
+$ month               &lt;date&gt; 2013-01-01, 2013-01-01, 2013-01-01, 2013-01-01, 2…
+$ town                &lt;fct&gt; ANG MO KIO, ANG MO KIO, ANG MO KIO, ANG MO KIO, AN…
+$ flat_type           &lt;fct&gt; 2 ROOM, 2 ROOM, 2 ROOM, 3 ROOM, 3 ROOM, 3 ROOM, 3 …
+$ block               &lt;fct&gt; 510, 314, 323, 170, 174, 445, 607, 535, 449, 602, …
+$ street_name         &lt;fct&gt; ANG MO KIO AVE 8, ANG MO KIO AVE 3, ANG MO KIO AVE…
+$ storey_range        &lt;fct&gt; 01 TO 03, 01 TO 03, 04 TO 06, 07 TO 09, 01 TO 03, …
+$ floor_area_sqm      &lt;dbl&gt; 44, 44, 44, 61, 60, 67, 68, 67, 68, 67, 74, 67, 68…
+$ flat_model          &lt;fct&gt; Improved, Improved, Improved, Improved, Improved, …
+$ lease_commence_date &lt;int&gt; 1980, 1978, 1977, 1986, 1986, 1979, 1980, 1980, 19…
+$ resale_price        &lt;dbl&gt; 253000, 270000, 283000, 305000, 320000, 325000, 32…
+$ remaining_lease     &lt;dbl&gt; 66, 64, 63, 72, 72, 65, 66, 66, 65, 66, 66, 65, 66…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(extract_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-1f3f11e1be1a56a38c3c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-1f3f11e1be1a56a38c3c">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01"],["ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO"],["2 ROOM","2 ROOM","2 ROOM","3 ROOM","3 ROOM","3 ROOM"],["510","314","323","170","174","445"],["ANG MO KIO AVE 8","ANG MO KIO AVE 3","ANG MO KIO AVE 3","ANG MO KIO AVE 4","ANG MO KIO AVE 4","ANG MO KIO AVE 10"],["01 TO 03","01 TO 03","04 TO 06","07 TO 09","01 TO 03","04 TO 06"],[44,44,44,61,60,67],["Improved","Improved","Improved","Improved","Improved","New Generation"],[1980,1978,1977,1986,1986,1979],[253000,270000,283000,305000,320000,325000],[66,64,63,72,72,65]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>month<\/th>\n      <th>town<\/th>\n      <th>flat_type<\/th>\n      <th>block<\/th>\n      <th>street_name<\/th>\n      <th>storey_range<\/th>\n      <th>floor_area_sqm<\/th>\n      <th>flat_model<\/th>\n      <th>lease_commence_date<\/th>\n      <th>resale_price<\/th>\n      <th>remaining_lease<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[7,9,10,11]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"month","targets":1},{"name":"town","targets":2},{"name":"flat_type","targets":3},{"name":"block","targets":4},{"name":"street_name","targets":5},{"name":"storey_range","targets":6},{"name":"floor_area_sqm","targets":7},{"name":"flat_model","targets":8},{"name":"lease_commence_date","targets":9},{"name":"resale_price","targets":10},{"name":"remaining_lease","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>In the end, we will save this dataframe as a rds object for faster loading of data in the future.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">write_rds</span>(extract_data, <span class="st">"data/resale_hdb.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
