@@ -1,0 +1,300 @@
+---
+title: "Clustering"
+date-modified: last-modified
+date-format: medium
+sidebar: TRUE
+execute: 
+  warning: false
+---
+
+```{r}
+#| code-fold: true
+#| code-summary: "Load R packages"
+
+pacman::p_load(tidyverse, ggplot2, plotly, DT, RColorBrewer)
+```
+
+# 1 Check Missing Value
+
+```{r}
+# read the data
+data <- readRDS("data/resale_hdb.rds")
+
+# check for missing values
+missing_values <- colSums(is.na(data))
+
+# print the result
+print(missing_values)
+
+```
+
+From above output, we can see that there is no missing value in the data set.
+
+# 2 Remove Outliers
+
+```{r}
+# Use boxplot to check outliers
+data <- readRDS("data/resale_hdb.rds")
+# Get names of numeric columns (assumed to be continuous variables)
+continuous_vars <- names(Filter(is.numeric, data))
+# Generate boxplot for all continuous variables
+boxplot(data[continuous_vars],cex.axis=0.7)
+```
+
+The result shows many outliers in *resale_price*, now let's remove them.
+
+```{r}
+
+# define a function to remove the outliers
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+  qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+  H <- 1.5 * IQR(x, na.rm = na.rm)
+  y <- x
+  y[x < (qnt[1] - H)] <- NA
+  y[x > (qnt[2] + H)] <- NA
+  y
+}
+
+columns_to_remove_outliers <- c("resale_price") 
+
+for (col in columns_to_remove_outliers) {
+  data[[col]] <- remove_outliers(data[[col]])
+}
+
+# check boxplot after removal
+boxplot(data[continuous_vars],cex.axis=0.7)
+
+```
+
+You can see that there are still some outliers in the *resale_price*. Let's remove them again.
+
+```{r}
+for (col in columns_to_remove_outliers) {
+  data[[col]] <- remove_outliers(data[[col]])
+}
+
+# check boxplot after removal
+boxplot(data[continuous_vars],cex.axis=0.7)
+
+```
+
+Now we assure that there are no more outliers in any of the continuous variables in the dataset.
+
+# 3 Feature Selection
+
+We will select appropriate variables for ease of clustering analysis and determine whether they need to be encoded in advance, as follows:
+
+![](images/Clustering.png){fig-align="center"}
+
+From the above, the variables we have selected are: *town, flat_type, storey_range, flat_model, floor_area_sqm, lease_commence_date,* and *remaining_lease*. Among these, categorical variables such as *town, flat_type, storey_range*, and *flat_model* need to be encoded first.
+
+# 4 Encoding
+
+Since the variables we need to encode have many categories, we can use **frequency encoding** to replace each category with its frequency of occurrence. This approach helps retain some information about the categories without introducing too many new features.
+
+```{r}
+# Define the frequency encoding function
+frequency_encoding <- function(data, variable) {
+  variable_name <- deparse(substitute(variable))
+  
+  # Calculate the frequency of each category
+  freq_table <- data %>%
+    group_by(!!sym(variable_name)) %>%
+    summarise(freq = n()) %>%
+    arrange(freq)
+  
+  # Create the encoding mapping with class values
+  encoding_map <- freq_table %>%
+    mutate(!!paste0(variable_name, "_freq_encoding") := row_number(),
+           !!paste0(variable_name, "_class") := !!sym(variable_name))
+  
+  # Merge the encoding mapping with the original data
+  data <- data %>%
+    left_join(encoding_map, by = variable_name)
+  
+  return(data)
+}
+
+# Apply frequency encoding to specified variables
+data <- frequency_encoding(data, town)
+data <- frequency_encoding(data, flat_type)
+data <- frequency_encoding(data, storey_range)
+data <- frequency_encoding(data, flat_model)
+
+#remove NA.
+data <- na.omit(data)
+
+glimpse(data)
+
+```
+
+Now, we have selected the variables to be used for clustering: *floor_area_sqm, lease_commence_date, resale_price, remaining_lease, town_freq_encoding, flat_type_freq_encoding, storey_range_freq_encoding,* and *flat_model_freq_encoding.*
+
+```{r}
+#select variables for clustering
+data_cl <- data %>%
+  select(floor_area_sqm, lease_commence_date, resale_price, remaining_lease, town_freq_encoding, flat_type_freq_encoding, storey_range_freq_encoding, flat_model_freq_encoding)
+
+#data scaling
+data_cl <- scale(data_cl)
+
+datatable(head(data_cl))
+```
+
+# 5 K-means Clustering
+
+# 5.1 Doing K-means Clustering
+
+```{r}
+# doing K-means clustering
+kmeans_result <- kmeans(data_cl, centers = 5, nstart = 5)  #users can change centers and nstarts in shiny app. here use 5 as an example. 
+
+# add result to original dataframe
+data$km_cluster <- kmeans_result$cluster
+
+cl_result <- data %>%
+  select(month, town, flat_type, storey_range, floor_area_sqm, flat_model, lease_commence_date, resale_price, remaining_lease, km_cluster)
+
+datatable(head(cl_result))
+```
+
+# 5.2 BIC & AIC
+
+```{r}
+# Calculate BIC and AIC
+n <- nrow(data_cl)
+p <- length(kmeans_result$centers) * (ncol(data_cl) - 1)
+
+BIC <- round(n * log(kmeans_result$tot.withinss / n) + p * log(n))
+AIC <- round(kmeans_result$tot.withinss + 2 * p)
+
+print(paste("BIC:", BIC))
+print(paste("AIC:", AIC))
+
+
+```
+
+# 5.3 Visualize the Result
+
+#### Cluster Propotion
+
+```{r}
+# count data points of each cluster
+cluster_counts <- data.frame(table(data$km_cluster))
+colnames(cluster_counts) <- c("Cluster", "Count")
+
+# create an interactive pie chart to visualize the result
+plot_ly(cluster_counts, labels = ~Cluster, values = ~Count, 
+        type = 'pie', textposition = 'inside', textinfo = 'percent',
+        insidetextfont = list(color = '#FFFFFF'),
+        hoverinfo = 'text',
+        text = ~paste('Cluster:', Cluster, '<br>Count:', Count),
+        marker = list(colors = brewer.pal(length(unique(cluster_counts$Cluster)), "Set1"),
+                      line = list(color = '#FFFFFF', width = 1)),
+        showlegend = FALSE) %>%
+  layout(title = 'Percentage of Data in Cluster',
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+```
+
+#### Cluster Charactistic
+
+```{r}
+# Bin continuous variables
+data$floor_area_sqm_bin <- cut(data$floor_area_sqm, breaks = seq(0, max(data$floor_area_sqm), by = 10), include.lowest = TRUE, right = FALSE)
+data$lease_commence_date_bin <- cut(data$lease_commence_date, breaks = seq(min(data$lease_commence_date), max(data$lease_commence_date), by = 10), include.lowest = TRUE, right = FALSE)
+data$remaining_lease_bin <- cut(data$remaining_lease, breaks = seq(0, max(data$remaining_lease), by = 10), include.lowest = TRUE, right = FALSE)
+
+data$resale_price_bin <- cut(data$resale_price, 
+                             breaks = seq(min(data$resale_price), max(data$resale_price), by = 100000),
+                             include.lowest = TRUE, right = FALSE)
+
+
+# Define variables to plot
+variables_to_plot <- c("town", "flat_type", "storey_range", "flat_model", "floor_area_sqm_bin", "lease_commence_date_bin", "remaining_lease_bin", "resale_price_bin")
+
+# Create subplot function
+create_subplot <- function(variable) {
+  # Filter out missing values
+  data_filtered <- data %>%
+    filter(!is.na(get(variable)))
+  
+  # Calculate count of each category in each cluster
+  count_by_cluster_category <- data_filtered %>%
+    group_by(km_cluster, !!sym(variable)) %>%
+    summarise(count = n(), .groups = "drop")
+  
+  # Calculate proportion of each category in each cluster
+  proportion_by_cluster_category <- count_by_cluster_category %>%
+    group_by(km_cluster) %>%
+    mutate(proportion = count / sum(count))
+  
+  plot_ly(proportion_by_cluster_category, 
+        x = ~factor(km_cluster), 
+        y = ~proportion, 
+        color = as.formula(paste0("~", variable)),
+        type = "bar", 
+        text = ~paste("<b>", variable, "</b><br>",
+                      format(get(variable), scientific = FALSE), ": ", round(proportion * 100, 2), "%"),
+        hoverinfo = "text", 
+        name = variable) %>%
+  layout(title = paste("Proportion of", variable, "in Each Cluster"),
+         xaxis = list(title = variable),
+         yaxis = list(title = "Proportion"),
+         barmode = "stack",
+         showlegend = TRUE,
+         hovermode = "x unified",
+         font = list(size = 8))
+
+ 
+}
+
+# Create subplots
+subplots <- lapply(variables_to_plot, create_subplot)
+
+# Combine subplots
+subplot(subplots, nrows = 1,  shareX= TRUE, shareY = TRUE) %>% 
+  layout(title = "Cluster Composition", showlegend = FALSE)
+
+```
+
+#### Cluster Charactistic Individual
+
+```{r}
+
+# Calculate the count of each town in each cluster
+data_count <- data %>%
+  group_by(km_cluster, flat_type) %>%
+  summarise(count = n(), .groups = "drop")
+
+# Calculate the proportion of each town in each cluster
+data_prop <- data_count %>%
+  group_by(km_cluster) %>%
+  mutate(proportion = count / sum(count))
+
+# Create an interactive stacked bar plot
+plot_ly(data_prop, x = ~factor(km_cluster), y = ~proportion, color = ~flat_type, 
+        type = "bar", text = ~paste0(flat_type, ": ", round(proportion * 100, 2), "%"),
+        hoverinfo = "text") %>%
+  layout(title = "Proportion of Towns in Each Cluster",
+         xaxis = list(title = "Cluster"),
+         yaxis = list(title = "Proportion"),
+         barmode = "stack",
+         legend = list(title = list(text = "Town")),
+         hovermode = "x unified") %>%
+  config(displayModeBar = TRUE, modeBarButtonsToRemove = c("sendDataToCloud", "lasso2d", "select2d", "autoScale2d"))
+
+
+```
+
+# 6 UI design
+
+In Shiny app, this part will be designed as follows:
+
+![](images/cluster1.png){fig-align="center"}
+
+![](images/cluster2.png){fig-align="center"}
+
+![](images/cluster3.png){fig-align="center"}
+
+![](images/cluster4.png){fig-align="center"}

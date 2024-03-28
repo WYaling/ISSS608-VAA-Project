@@ -246,5 +246,49 @@ datatable(head(extract_data))
 In the end, we will save this dataframe as a rds object for faster loading of data in the future.
 
 ```{r}
-write_rds(extract_data, "data/resale_hdb.rds")
+#write_rds(extract_data, "data/resale_hdb.rds")
+```
+
+# 4. Create data set for predictive modeling
+
+## 4.1 extract data of year 2023
+
+Firstly, extract data from the year 2023 for predictive modeling, and exclude some variables to prevent the dataset from containing too many variables after subsequent one-hot encoding, which could lead to increased model complexity and computational burden.
+
+```{r}
+data <- subset(extract_data[format(extract_data$month, "%Y") == "2023", ], select = -c(block, street_name, month, lease_commence_date))
+```
+
+## 4.2 Handling Variable Names
+
+```{r}
+# 1.Handling Variable Names
+
+replace_special_chars <- function(x) {
+  gsub("[^A-Za-z0-9]", "_", x)
+}
+
+factor_cols <- sapply(data, is.factor)
+
+data[, factor_cols] <- lapply(data[, factor_cols], replace_special_chars)
+
+```
+
+## 2. One-Hot Encoding Categorical Variables
+
+```{r}
+# 2. One-Hot Encoding Categorical Variables
+data <- model.matrix(~ . - 1, data = data)
+
+data <- as.data.frame(data)
+data$resale_price <- log(data$resale_price)
+
+```
+
+```{r}
+glimpse(data)
+```
+
+```{r}
+#write_rds(data, "data/data_model.rds")
 ```

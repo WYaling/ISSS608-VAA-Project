@@ -1,0 +1,432 @@
+---
+title: "Exploratory Data Analysis"
+date-modified: last-modified
+date-format: medium
+sidebar: TRUE
+execute: 
+  warning: false
+---
+
+```{r}
+#| code-fold: true
+#| code-summary: "Load R packages"
+
+pacman::p_load(tidyverse, ggplot2, plotly, treemap, DT, RColorBrewer)
+```
+
+::: {.callout-note icon="false"}
+This exercise is a part of the group project.
+:::
+
+# 1. Introduction to Project
+
+Our team's project focuses on "Analysis and Prediction of Resale Prices of HDB in Singapore." The objective is to utilize historical data (2013-2023) on the resale of HDB in Singapore to analyze the factors influencing resale prices and to forecast these prices using machine learning models.
+
+## 1.1 Data Preparation
+
+The data is sourced from the [Kaggle](https://www.kaggle.com/) dataset titled "[Resale Prices of HDB flats from 2012 to 2023.](https://www.kaggle.com/datasets/syrahmadi/resale-hdb-flat-prices-2000-2022?resource=download)" Through collaborative efforts, our team has completed the data preparation phase. For further details, please visit: [link to data preparation](https://isss608-vaa-project-group7.netlify.app/data_preparation/data_preparation). Going forward, I will provide a brief overview of the cleaned dataset.
+
+The following graph shows how we get a new data file from the kaggle dataset.
+
+![](images/Datasets.png)
+
+After the above step, we performed data inspection and cleaning, changed the data types of categorical variables, and removed duplicate rows. At the end of the data cleaning process, we saved the data file as ***resale_hdb.rds***. Now, let's take a brief look at the cleaned dataset.
+
+```{r}
+#Check the dataset
+data <- read_rds("data/resale_hdb.rds")
+glimpse(data)
+```
+
+From the above output, we can see that the dataset we are going to analyze contains 237,909 HDB resale records, including 11 variables. Among them, there are:
+
+-   4 numerical variables: *floor_area_sqm, lease_commence_date, resale_price, remaining_lease*;
+
+-   7 categorical variables*: month, town, flat_type, block, street_name, storey_range, flat_model.*
+
+Let's see how many unique values in each variable.
+
+```{r}
+#Count unique values of each variable
+unique_counts <- sapply(data, function(x) length(unique(x)))
+data.frame(Unique_Values_Count = unique_counts)
+```
+
+Now, I will introduce the definitions of each variable to facilitate your understanding.
+
+![](images/Definitions.png){fig-align="center"}
+
+## 1.2 Objective of The Report
+
+::: {style="background-color: #D6EAF8;    border-radius: 10px;    padding: 20px;"}
+1.  This report will provide a detailed exposition of the following sections of the group project:
+    -   Exploratory Data Analysis.
+        -   Univariate analysis: aiming to assist users to understand the quantity and distribution of resale HDB properties through different variable.
+
+        -   Bivariate analysis: aiming to assist users to understand the driving factors of the resale price through visualizations.
+    -   Clustering.
+2.  This report will offer UI design for each section in the Shiny App.
+:::
+
+# 2. Exploratory Data Analysis
+
+As above mentioned, this report will present Exploratory Data Analysis (EDA) through two approaches. See the graph below:
+
+![](images/EDA%20workflow.png){fig-align="center" width="515"}
+
+Univariate and bivariate are commonly used methods in EDA:
+
+1.  **Univariate Analysis**: Univariate Analysis refers to analyzing individual variables. It focuses on the distribution, central tendency, and dispersion of single variables. Common methods for univariate analysis include descriptive statistics, histograms, and box plots. Through univariate analysis, we can understand the properties and characteristics of individual variables without considering the influence of other variables.
+
+::: {style="background-color: #D6EAF8;    border-radius: 10px;    padding: 20px;"}
+**The purpose of doing univariate analysis in this project is:**
+
+to provide the frequencies and distributions of different variables (such as flat type, housing area, geographical location, etc.), enabling users to understand the resale market situation or popularity of their own HDB flat or second-hand HDB flats they are interested in purchasing on the resale market.
+:::
+
+2.  **Bivariate Analysis**: Bivariate Analysis involves analyzing the relationship between two variables. It explores the correlation, joint distribution, and trends between two variables. Common methods for bivariate analysis include scatter plots, correlation coefficient analysis, and bivariate regression. Bivariate analysis helps us explore the relationship between two variables and understand their interactions and effects.
+
+::: {style="background-color: #D6EAF8;    border-radius: 10px;    padding: 20px;"}
+**The purpose of doing bivariate analysis in this project is:**
+
+to explore the relationship between resale price and other variables, helping users understand the driving factors of resale price.
+:::
+
+These methods are very useful in exploring our dataset, helping us understand the relationships, characteristics, and patterns of variables, and providing a foundation for further data analysis and modeling.
+
+Based on the above approach, we have designed the user interface for the EDA section in the ShinyApp, as depicted in the following sketch:
+
+![](images/Shiny_EDA.png){fig-align="center" width="366"}
+
+Moving forward, let's delve into more detailed design for each approach.
+
+## 2.1 Univariate Analysis
+
+### 2.1.1 Preparation
+
+First of all, let's identify variables suitable for univariate analysis and find appropriate charts for them. The following chart illustrates how I select suitable variables for univariate analysis and the optimal chart I will use to present to users.
+
+![](images/Univariate.png){fig-align="center"}
+
+### 2.1.2 Chart Creation
+
+We can utilize different R packages to create different types of plots.
+
+-   [`ggplot`](https://ggplot2.tidyverse.org/), for line charts, histograms, and violin plots;
+
+-   [`plotly`](https://plotly-r.com/), for making plots interactive.
+
+Now, I will showcase examples of the source code for creating different types of charts.
+
+::: panel-tabset
+## Line-chart
+
+```{r}
+#Univariate Analysis: by month
+
+# group data by month and count quantity for each month
+data_summarized <- data %>%
+  group_by(month) %>%
+  summarise(quantity = n())
+
+# create plotly figure
+fig <- plot_ly(data_summarized, x = ~month, y = ~quantity, type = "scatter", mode = "lines+markers",
+               line = list(color = "blue", width = 0.3),
+               marker = list(color = "red", size = 3))
+
+# add range slider and customize layout
+fig <- fig %>%
+  layout(title = "Resale Quantity by Month (2013-2023)",
+         xaxis = list(title = "Month in Year",
+                      rangeslider = list(visible = TRUE),
+                      tickformat = "%Y-%m",
+                      tickangle = 60,
+                      tickfont = list(size = 6)),
+         yaxis = list(title = "Quantity",
+                      tickmode = "linear",
+                      tick0 = 0,
+                      dtick = 500))
+
+# display the plot
+fig
+```
+
+## Histogram
+
+```{r}
+# Univariate Analysis: by town
+
+# Sort the quantity of HDB resale transaction in different towns from high to low using fct_reorder.
+data$town <- fct_reorder(data$town, data$town, function(x) -length(x))
+
+# create a histogram by town
+p3 <- ggplot(data, aes(x = town)) +
+  geom_bar(fill = "steelblue", color = "black", alpha = 0.5) +  # Changed geom_histogram to geom_bar
+  labs(title = "Resale Quantity by town (2013-2023)", x = "town", y = "Quantity") +
+  theme(axis.text.x = element_text(size = 6, angle = 60, vjust = 0.5)) 
+
+ggplotly(p3)
+
+```
+
+## Violin Plot
+
+```{r}
+#Univariate Analysis: by remaining_lease
+
+p3 <- ggplot(data, aes(x = "", y = remaining_lease)) +
+  geom_boxplot(color = "blue") +
+  geom_violin(fill = "forestgreen", color = "forestgreen", alpha = 0.3) +
+  stat_summary(fun = "mean", geom = "point", shape = 18, size = 4, color = "red", position = position_dodge(width = 0.75)) +
+  labs(title = "Violin Plot of Remaining Lease  (2013-2023) (Red dot: Mean Value)", y = "Remaining Lease", x="") 
+
+ggplotly(p3)
+```
+:::
+
+### 2.1.3 UI Design
+
+In the Shiny app, we will design a feature where users can freely select a variable, view its visualization, and simultaneously see either the count summary or descriptive statistics of that variable.
+
+The demo is as follows:
+
+![](images/Univariate_shiny.png){fig-align="center" width="736"}
+
+## 2.2 Bivariate Analysis
+
+### 2.2.1 Preparation
+
+First of all, let's identify variables suitable for univariate analysis and find appropriate charts for them. The following chart illustrates how I select suitable variables for univariate analysis and the optimal chart I will use to present to users.
+
+![](images/Bivariate.png){fig-align="center"}
+
+From the image above, it's apparent that "month" stands out as a unique variable becaue of its chart type . I will create a separate box for it to display the results in Shiny. Other variables can be represented using box plots, treemaps, and heatmaps. Below, I will illustrate the process of creating visualizations for "month", categorical variables, and numerical variables.
+
+### 2.2.2 Chart Creation
+
+We can utilize different R packages to create different types of plots.
+
+-   [`ggplot`](https://ggplot2.tidyverse.org/), for line charts, histograms, and density plots;
+
+-   [`plotly`](https://plotly-r.com/), for making plots interactive.
+
+Now, I will showcase examples of the source code for creating different types of charts.
+
+#### Month
+
+::: panel-tabset
+## Line Chart
+
+```{r}
+#Bivariate Analysis: resale price by month
+
+# Group the data by month and calculate the median resale price for each month.
+median_data <- aggregate(resale_price ~ month, data = data, FUN = median)
+
+# Create a plotly figure
+fig <- plot_ly(median_data, x = ~month, y = ~resale_price, type = "scatter", mode = "lines+markers",
+               line = list(color = "blue", width = 0.3),
+               marker = list(color = "red", size = 3))
+
+# Add range slider
+fig <- fig %>%
+  layout(title = "Median Resale Price by Month (2013-2023)",
+         xaxis = list(title = "Month", rangeslider = list(visible = TRUE)),
+         yaxis = list(title = "Median Resale Price"))
+
+# Display the plot
+fig
+```
+
+## Boxplot
+
+```{r}
+# Convert the month column to a date format and extract the month
+data$month <- as.Date(paste0(data$month, "-01"))
+data$month_group <- format(data$month, "%Y-%m")
+
+# Group the data by month and calculate the median resale price for each month
+median_prices <- data %>%
+  group_by(month_group) %>%
+  summarise(median_price = median(resale_price))
+
+# Create the boxplot
+p <- ggplot(data, aes(x = month_group, y = resale_price)) +
+  geom_boxplot(fill = "steelblue", color = "grey30", alpha = 0.5) +
+  geom_line(data = median_prices, aes(x = month_group, y = median_price, group = 1), color = "red", size = 0.5) +
+  labs(
+    title = "Resale Price by Month (2013-2023)",
+    x = "Month", 
+    y = "Resale Price"
+  ) +
+  theme_dark() +
+  theme(axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5), legend.position = "none") +
+  scale_x_discrete(labels = function(x) substr(x, 1, 7)) # Display only the year and month
+
+ggplotly(p)
+
+
+
+```
+:::
+
+#### Categorical Variable:
+
+Categorical variables will be plotted are *town, flat_type, storey_range, flat_model.* I will take *town* as an example here.
+
+::: panel-tabset
+## Treemap
+
+```{r}
+# Prepare the data for treemap
+treemap_data <- data %>%
+  group_by(town) %>%
+  summarise(count = n(), median_resale_price = median(resale_price))
+
+# Create the basic treemap
+treemap(
+  treemap_data,
+  index = "town",
+  vSize = "count",
+  vColor = "median_resale_price",
+  type = "value",
+  bg.labels = "white",
+  align.labels = list(c("center", "center"), c("right", "bottom")),
+  title = "Treemap of Median Resale Price by town  (2013-2023)",
+  title.legend = "Median Resale Price",
+  fontsize.labels = 12
+)
+
+```
+
+## Boxplot
+
+```{r}
+# Bivariate Analysis: resale price by town
+
+# Calculate median resale price for each town
+median_prices <- data %>%
+  group_by(town) %>%
+  summarise(median_price = median(resale_price))
+
+# Reorder the levels of the town variable based on the median resale price
+data$town <- factor(data$town, levels = median_prices$town[order(median_prices$median_price)])
+
+p <- ggplot(data, aes(x = town, y = resale_price, fill = town)) +
+  geom_boxplot(color = "black", alpha = 0.8) +
+  scale_fill_viridis_d(name = "town", option = "plasma") +
+  labs(title = "Boxplot of Resale Price by town  (2013-2023) (sorted by median)", x = "town", y = "Resale Price") +
+  theme(axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5), legend.position = "none")
+ggplotly(p)
+
+```
+
+## Heatmap
+
+```{r}
+# Create the heat map
+p <- ggplot(data, aes(x = town, y = resale_price)) +
+  geom_bin2d(binwidth = c(5, 10000)) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  labs(
+    title = "Heatmap of Resale Price by town (2013-2023)",
+    x = "town",
+    y = "Resale Price"
+  ) +
+  theme(axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5))
+
+ggplotly(p)
+```
+:::
+
+#### Numerical Variable
+
+Numerical variables will be plotted are *floor_area_sqm, lease_commence_date, remaining_lease*. I will take *floor_area_sqm* as an example here.
+
+::: panel-tabset
+## Treemap
+
+```{r}
+
+# Create bins for floor area
+data$floor_area_bins <- cut(data$floor_area_sqm, breaks = seq(0, max(data$floor_area_sqm), by = 10))
+
+# Calculate median resale price and count for each floor area bin
+treemap_data <- data %>%
+  group_by(floor_area_bins) %>%
+  summarise(
+    median_price = median(resale_price),
+    count = n()
+  )
+
+# Create the treemap
+treemap(
+  treemap_data,
+  index = "floor_area_bins",
+  vSize = "count",
+  vColor = "median_price",
+  type = "value",
+  title = "Treemap of Median Resale Price by floor_area_sqm (2013-2023)",
+  title.legend = "Median Resale Price",
+  bg.labels = "white",
+  fontsize.labels = 12,
+  align.labels = list(
+    c("center", "center"),
+    c("right", "bottom")
+  )
+)
+```
+
+## Boxplot
+
+```{r}
+# Create bins for floor area
+data$floor_area_bins <- cut(data$floor_area_sqm, breaks = seq(0, max(data$floor_area_sqm), by = 10))
+
+# Calculate median resale price for each floor area bin
+median_prices <- data %>%
+  group_by(floor_area_bins) %>%
+  summarise(median_price = median(resale_price))
+
+# Reorder the levels of the floor area bins based on the median resale price
+data$floor_area_bins <- factor(data$floor_area_bins, levels = median_prices$floor_area_bins[order(median_prices$median_price)])
+
+# Create the box plot using ggplot2
+p <- ggplot(data, aes(x = floor_area_bins, y = resale_price, fill = floor_area_bins)) +
+  geom_boxplot(color = "black", alpha = 0.8) +
+  scale_fill_viridis_d(name = "Floor Area (sqm)", option = "plasma") +
+  labs(
+    title = "Boxplot of Resale Price by floor_area_sqm (2013-2023) (sorted by median)",
+    x = "floor_area_sqm",
+    y = "Resale Price"
+  ) +
+  theme(axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5), legend.position = "none")
+ggplotly(p)
+```
+
+## Heatmap
+
+```{r}
+# Create the heatmap
+p <- ggplot(data, aes(x = floor_area_sqm, y = resale_price)) +
+  geom_bin2d(binwidth = c(5, 10000)) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Count") +
+  scale_x_continuous(breaks = seq(0, max(data$floor_area_sqm), by = 10)) +
+  labs(
+    title = "Heatmap of Resale Price by floor_area_sqm (2013-2023)",
+    x = "floor_area_sqm",
+    y = "Resale Price"
+  ) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),legend.position = "right")
+ggplotly(p)
+```
+:::
+
+### 2.2.3 UI Design
+
+In the Shiny app, we will design a feature where users can freely select a variable, then visualize bivariate analysis to see how the variable influences resale price.
+
+The demo is as follows:
+
+![](images/Bivariate_shiny.png){fig-align="center"}
+

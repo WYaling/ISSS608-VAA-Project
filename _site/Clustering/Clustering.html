@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Clustering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../EDA/EDA.html" rel="prev">
+<link href="../images/Website_logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="../site_libs/datatables-binding-0.31/datatables.js"></script>
+<script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="../site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="../site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<script src="../site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Clustering/Clustering.html">Clustering</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../images/hdbresale.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      <div class="sidebar-tools-main">
+    <a href="https://github.com/WYaling/ISSS608-VAA-Project" title="Github" class="quarto-navigation-tool px-1" aria-label="Github"><i class="bi bi-github"></i></a>
+    <a href="https://isss608-vaa-project-group7.netlify.app/" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house-fill"></i></a>
+</div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Team</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Meeting_Minutes/Meeting_Minutes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Meeting Minutes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Proposal/Proposal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Proposal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Data_preparation/Data_Preparation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Preparation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../EDA/EDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exploratory Data Analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Clustering/Clustering.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Clustering</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#check-missing-value" id="toc-check-missing-value" class="nav-link active" data-scroll-target="#check-missing-value">1 Check Missing Value</a></li>
+  <li><a href="#remove-outliers" id="toc-remove-outliers" class="nav-link" data-scroll-target="#remove-outliers">2 Remove Outliers</a></li>
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection">3 Feature Selection</a></li>
+  <li><a href="#encoding" id="toc-encoding" class="nav-link" data-scroll-target="#encoding">4 Encoding</a></li>
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">5 K-means Clustering</a></li>
+  <li><a href="#doing-k-means-clustering" id="toc-doing-k-means-clustering" class="nav-link" data-scroll-target="#doing-k-means-clustering">5.1 Doing K-means Clustering</a></li>
+  <li><a href="#bic-aic" id="toc-bic-aic" class="nav-link" data-scroll-target="#bic-aic">5.2 BIC &amp; AIC</a></li>
+  <li><a href="#visualize-the-result" id="toc-visualize-the-result" class="nav-link" data-scroll-target="#visualize-the-result">5.3 Visualize the Result</a></li>
+  <li><a href="#ui-design" id="toc-ui-design" class="nav-link" data-scroll-target="#ui-design">6 UI design</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Clustering</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">Mar 20, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Load R packages</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggplot2, plotly, DT, RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="check-missing-value" class="level1">
+<h1>1 Check Missing Value</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># read the data</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/resale_hdb.rds"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># check for missing values</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>missing_values <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(data))</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># print the result</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">print</span>(missing_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              month                town           flat_type               block 
+                  0                   0                   0                   0 
+        street_name        storey_range      floor_area_sqm          flat_model 
+                  0                   0                   0                   0 
+lease_commence_date        resale_price     remaining_lease 
+                  0                   0                   0 </code></pre>
+</div>
+</div>
+<p>From above output, we can see that there is no missing value in the data set.</p>
+</section>
+<section id="remove-outliers" class="level1">
+<h1>2 Remove Outliers</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Use boxplot to check outliers</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/resale_hdb.rds"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># Get names of numeric columns (assumed to be continuous variables)</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>continuous_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">Filter</span>(is.numeric, data))</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># Generate boxplot for all continuous variables</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="fu">boxplot</span>(data[continuous_vars],<span class="at">cex.axis=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Clustering_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The result shows many outliers in <em>resale_price</em>, now let’s remove them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># define a function to remove the outliers</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>remove_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, ...) {</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  qnt <span class="ot">&lt;-</span> <span class="fu">quantile</span>(x, <span class="at">probs=</span><span class="fu">c</span>(.<span class="dv">25</span>, .<span class="dv">75</span>), <span class="at">na.rm =</span> na.rm, ...)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  H <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> <span class="fu">IQR</span>(x, <span class="at">na.rm =</span> na.rm)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>  y <span class="ot">&lt;-</span> x</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  y[x <span class="sc">&lt;</span> (qnt[<span class="dv">1</span>] <span class="sc">-</span> H)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>  y[x <span class="sc">&gt;</span> (qnt[<span class="dv">2</span>] <span class="sc">+</span> H)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>  y</span>
+<span id="cb5-9"><a href="#cb5-9"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>columns_to_remove_outliers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"resale_price"</span>) </span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="cf">for</span> (col <span class="cf">in</span> columns_to_remove_outliers) {</span>
+<span id="cb5-14"><a href="#cb5-14"></a>  data[[col]] <span class="ot">&lt;-</span> <span class="fu">remove_outliers</span>(data[[col]])</span>
+<span id="cb5-15"><a href="#cb5-15"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co"># check boxplot after removal</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="fu">boxplot</span>(data[continuous_vars],<span class="at">cex.axis=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Clustering_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can see that there are still some outliers in the <em>resale_price</em>. Let’s remove them again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> (col <span class="cf">in</span> columns_to_remove_outliers) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  data[[col]] <span class="ot">&lt;-</span> <span class="fu">remove_outliers</span>(data[[col]])</span>
+<span id="cb6-3"><a href="#cb6-3"></a>}</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># check boxplot after removal</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="fu">boxplot</span>(data[continuous_vars],<span class="at">cex.axis=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Clustering_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we assure that there are no more outliers in any of the continuous variables in the dataset.</p>
+</section>
+<section id="feature-selection" class="level1">
+<h1>3 Feature Selection</h1>
+<p>We will select appropriate variables for ease of clustering analysis and determine whether they need to be encoded in advance, as follows:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/Clustering.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>From the above, the variables we have selected are: <em>town, flat_type, storey_range, flat_model, floor_area_sqm, lease_commence_date,</em> and <em>remaining_lease</em>. Among these, categorical variables such as <em>town, flat_type, storey_range</em>, and <em>flat_model</em> need to be encoded first.</p>
+</section>
+<section id="encoding" class="level1">
+<h1>4 Encoding</h1>
+<p>Since the variables we need to encode have many categories, we can use <strong>frequency encoding</strong> to replace each category with its frequency of occurrence. This approach helps retain some information about the categories without introducing too many new features.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Define the frequency encoding function</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>frequency_encoding <span class="ot">&lt;-</span> <span class="cf">function</span>(data, variable) {</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  variable_name <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(variable))</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  </span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="co"># Calculate the frequency of each category</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  freq_table <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="fu">group_by</span>(<span class="sc">!!</span><span class="fu">sym</span>(variable_name)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="fu">summarise</span>(<span class="at">freq =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="fu">arrange</span>(freq)</span>
+<span id="cb7-10"><a href="#cb7-10"></a>  </span>
+<span id="cb7-11"><a href="#cb7-11"></a>  <span class="co"># Create the encoding mapping with class values</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>  encoding_map <span class="ot">&lt;-</span> freq_table <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="fu">mutate</span>(<span class="sc">!!</span><span class="fu">paste0</span>(variable_name, <span class="st">"_freq_encoding"</span>) <span class="sc">:</span><span class="er">=</span> <span class="fu">row_number</span>(),</span>
+<span id="cb7-14"><a href="#cb7-14"></a>           <span class="sc">!!</span><span class="fu">paste0</span>(variable_name, <span class="st">"_class"</span>) <span class="sc">:</span><span class="er">=</span> <span class="sc">!!</span><span class="fu">sym</span>(variable_name))</span>
+<span id="cb7-15"><a href="#cb7-15"></a>  </span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="co"># Merge the encoding mapping with the original data</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>  data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>    <span class="fu">left_join</span>(encoding_map, <span class="at">by =</span> variable_name)</span>
+<span id="cb7-19"><a href="#cb7-19"></a>  </span>
+<span id="cb7-20"><a href="#cb7-20"></a>  <span class="fu">return</span>(data)</span>
+<span id="cb7-21"><a href="#cb7-21"></a>}</span>
+<span id="cb7-22"><a href="#cb7-22"></a></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="co"># Apply frequency encoding to specified variables</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a>data <span class="ot">&lt;-</span> <span class="fu">frequency_encoding</span>(data, town)</span>
+<span id="cb7-25"><a href="#cb7-25"></a>data <span class="ot">&lt;-</span> <span class="fu">frequency_encoding</span>(data, flat_type)</span>
+<span id="cb7-26"><a href="#cb7-26"></a>data <span class="ot">&lt;-</span> <span class="fu">frequency_encoding</span>(data, storey_range)</span>
+<span id="cb7-27"><a href="#cb7-27"></a>data <span class="ot">&lt;-</span> <span class="fu">frequency_encoding</span>(data, flat_model)</span>
+<span id="cb7-28"><a href="#cb7-28"></a></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="co">#remove NA.</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a>data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(data)</span>
+<span id="cb7-31"><a href="#cb7-31"></a></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="fu">glimpse</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 229,338
+Columns: 23
+$ month                      &lt;date&gt; 2013-01-01, 2013-01-01, 2013-01-01, 2013-0…
+$ town                       &lt;fct&gt; ANG MO KIO, ANG MO KIO, ANG MO KIO, ANG MO …
+$ flat_type                  &lt;fct&gt; 2 ROOM, 2 ROOM, 2 ROOM, 3 ROOM, 3 ROOM, 3 R…
+$ block                      &lt;fct&gt; 510, 314, 323, 170, 174, 445, 607, 535, 449…
+$ street_name                &lt;fct&gt; ANG MO KIO AVE 8, ANG MO KIO AVE 3, ANG MO …
+$ storey_range               &lt;fct&gt; 01 TO 03, 01 TO 03, 04 TO 06, 07 TO 09, 01 …
+$ floor_area_sqm             &lt;dbl&gt; 44, 44, 44, 61, 60, 67, 68, 67, 68, 67, 74,…
+$ flat_model                 &lt;fct&gt; Improved, Improved, Improved, Improved, Imp…
+$ lease_commence_date        &lt;int&gt; 1980, 1978, 1977, 1986, 1986, 1979, 1980, 1…
+$ resale_price               &lt;dbl&gt; 253000, 270000, 283000, 305000, 320000, 325…
+$ remaining_lease            &lt;dbl&gt; 66, 64, 63, 72, 72, 65, 66, 66, 65, 66, 66,…
+$ freq.x                     &lt;int&gt; 10438, 10438, 10438, 10438, 10438, 10438, 1…
+$ town_freq_encoding         &lt;int&gt; 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,…
+$ town_class                 &lt;fct&gt; ANG MO KIO, ANG MO KIO, ANG MO KIO, ANG MO …
+$ freq.y                     &lt;int&gt; 3585, 3585, 3585, 59644, 59644, 59644, 5964…
+$ flat_type_freq_encoding    &lt;int&gt; 3, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6…
+$ flat_type_class            &lt;fct&gt; 2 ROOM, 2 ROOM, 2 ROOM, 3 ROOM, 3 ROOM, 3 R…
+$ freq.x.x                   &lt;int&gt; 43305, 43305, 55755, 50769, 43305, 55755, 5…
+$ storey_range_freq_encoding &lt;int&gt; 14, 14, 17, 16, 14, 17, 17, 14, 17, 17, 14,…
+$ storey_range_class         &lt;fct&gt; 01 TO 03, 01 TO 03, 04 TO 06, 07 TO 09, 01 …
+$ freq.y.y                   &lt;int&gt; 59487, 59487, 59487, 59487, 59487, 33405, 3…
+$ flat_model_freq_encoding   &lt;int&gt; 20, 20, 20, 20, 20, 19, 19, 19, 19, 19, 19,…
+$ flat_model_class           &lt;fct&gt; Improved, Improved, Improved, Improved, Imp…</code></pre>
+</div>
+</div>
+<p>Now, we have selected the variables to be used for clustering: <em>floor_area_sqm, lease_commence_date, resale_price, remaining_lease, town_freq_encoding, flat_type_freq_encoding, storey_range_freq_encoding,</em> and <em>flat_model_freq_encoding.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#select variables for clustering</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>data_cl <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">select</span>(floor_area_sqm, lease_commence_date, resale_price, remaining_lease, town_freq_encoding, flat_type_freq_encoding, storey_range_freq_encoding, flat_model_freq_encoding)</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#data scaling</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>data_cl <span class="ot">&lt;-</span> <span class="fu">scale</span>(data_cl)</span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">datatable</span>(<span class="fu">head</span>(data_cl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-5b7ebe83dfb9b770492f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5b7ebe83dfb9b770492f">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[-2.19193684619496,-2.19193684619496,-2.19193684619496,-1.477483716375737,-1.519510371070986,-1.225323788204247],[-1.051290505665649,-1.20232289826349,-1.277839094562411,-0.5981933278721269,-0.5981933278721269,-1.12680670196457],[-1.527167509202257,-1.40263918599812,-1.307411644724368,-1.146257344107249,-1.036379411868305,-0.9997534344553232],[-0.6518165699849235,-0.8065736733159249,-0.8839522249814256,-0.1875452599919195,-0.1875452599919195,-0.7291951216504242],[-0.1242595524547345,-0.1242595524547345,-0.1242595524547345,-0.1242595524547345,-0.1242595524547345,-0.1242595524547345],[-2.881150875577408,-2.881150875577408,-2.881150875577408,0.001713761110101431,0.001713761110101431,0.001713761110101431],[-0.5629808804080308,-0.5629808804080308,1.111157616402439,0.5531114507989494,-0.5629808804080308,1.111157616402439],[0.3759819968682858,0.3759819968682858,0.3759819968682858,0.3759819968682858,0.3759819968682858,-0.08398097860862369]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>floor_area_sqm<\/th>\n      <th>lease_commence_date<\/th>\n      <th>resale_price<\/th>\n      <th>remaining_lease<\/th>\n      <th>town_freq_encoding<\/th>\n      <th>flat_type_freq_encoding<\/th>\n      <th>storey_range_freq_encoding<\/th>\n      <th>flat_model_freq_encoding<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"floor_area_sqm","targets":1},{"name":"lease_commence_date","targets":2},{"name":"resale_price","targets":3},{"name":"remaining_lease","targets":4},{"name":"town_freq_encoding","targets":5},{"name":"flat_type_freq_encoding","targets":6},{"name":"storey_range_freq_encoding","targets":7},{"name":"flat_model_freq_encoding","targets":8}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="k-means-clustering" class="level1">
+<h1>5 K-means Clustering</h1>
+</section>
+<section id="doing-k-means-clustering" class="level1">
+<h1>5.1 Doing K-means Clustering</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># doing K-means clustering</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(data_cl, <span class="at">centers =</span> <span class="dv">5</span>, <span class="at">nstart =</span> <span class="dv">5</span>)  <span class="co">#users can change centers and nstarts in shiny app. here use 5 as an example. </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># add result to original dataframe</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>data<span class="sc">$</span>km_cluster <span class="ot">&lt;-</span> kmeans_result<span class="sc">$</span>cluster</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a>cl_result <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a>  <span class="fu">select</span>(month, town, flat_type, storey_range, floor_area_sqm, flat_model, lease_commence_date, resale_price, remaining_lease, km_cluster)</span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="fu">datatable</span>(<span class="fu">head</span>(cl_result))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-2aaa0021605d38ebcc34" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-2aaa0021605d38ebcc34">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],["2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01","2013-01-01"],["ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO","ANG MO KIO"],["2 ROOM","2 ROOM","2 ROOM","3 ROOM","3 ROOM","3 ROOM"],["01 TO 03","01 TO 03","04 TO 06","07 TO 09","01 TO 03","04 TO 06"],[44,44,44,61,60,67],["Improved","Improved","Improved","Improved","Improved","New Generation"],[1980,1978,1977,1986,1986,1979],[253000,270000,283000,305000,320000,325000],[66,64,63,72,72,65],[3,3,3,3,3,3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>month<\/th>\n      <th>town<\/th>\n      <th>flat_type<\/th>\n      <th>storey_range<\/th>\n      <th>floor_area_sqm<\/th>\n      <th>flat_model<\/th>\n      <th>lease_commence_date<\/th>\n      <th>resale_price<\/th>\n      <th>remaining_lease<\/th>\n      <th>km_cluster<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[5,7,8,9,10]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"month","targets":1},{"name":"town","targets":2},{"name":"flat_type","targets":3},{"name":"storey_range","targets":4},{"name":"floor_area_sqm","targets":5},{"name":"flat_model","targets":6},{"name":"lease_commence_date","targets":7},{"name":"resale_price","targets":8},{"name":"remaining_lease","targets":9},{"name":"km_cluster","targets":10}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="bic-aic" class="level1">
+<h1>5.2 BIC &amp; AIC</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Calculate BIC and AIC</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(data_cl)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(kmeans_result<span class="sc">$</span>centers) <span class="sc">*</span> (<span class="fu">ncol</span>(data_cl) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a>BIC <span class="ot">&lt;-</span> <span class="fu">round</span>(n <span class="sc">*</span> <span class="fu">log</span>(kmeans_result<span class="sc">$</span>tot.withinss <span class="sc">/</span> n) <span class="sc">+</span> p <span class="sc">*</span> <span class="fu">log</span>(n))</span>
+<span id="cb11-6"><a href="#cb11-6"></a>AIC <span class="ot">&lt;-</span> <span class="fu">round</span>(kmeans_result<span class="sc">$</span>tot.withinss <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> p)</span>
+<span id="cb11-7"><a href="#cb11-7"></a></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"BIC:"</span>, BIC))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "BIC: 329771"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"AIC:"</span>, AIC))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AIC: 952071"</code></pre>
+</div>
+</div>
+</section>
+<section id="visualize-the-result" class="level1">
+<h1>5.3 Visualize the Result</h1>
+<section id="cluster-propotion" class="level4">
+<h4 class="anchored" data-anchor-id="cluster-propotion">Cluster Propotion</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># count data points of each cluster</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>cluster_counts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">table</span>(data<span class="sc">$</span>km_cluster))</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">colnames</span>(cluster_counts) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cluster"</span>, <span class="st">"Count"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co"># create an interactive pie chart to visualize the result</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="fu">plot_ly</span>(cluster_counts, <span class="at">labels =</span> <span class="sc">~</span>Cluster, <span class="at">values =</span> <span class="sc">~</span>Count, </span>
+<span id="cb15-7"><a href="#cb15-7"></a>        <span class="at">type =</span> <span class="st">'pie'</span>, <span class="at">textposition =</span> <span class="st">'inside'</span>, <span class="at">textinfo =</span> <span class="st">'percent'</span>,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>        <span class="at">insidetextfont =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'#FFFFFF'</span>),</span>
+<span id="cb15-9"><a href="#cb15-9"></a>        <span class="at">hoverinfo =</span> <span class="st">'text'</span>,</span>
+<span id="cb15-10"><a href="#cb15-10"></a>        <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste</span>(<span class="st">'Cluster:'</span>, Cluster, <span class="st">'&lt;br&gt;Count:'</span>, Count),</span>
+<span id="cb15-11"><a href="#cb15-11"></a>        <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">colors =</span> <span class="fu">brewer.pal</span>(<span class="fu">length</span>(<span class="fu">unique</span>(cluster_counts<span class="sc">$</span>Cluster)), <span class="st">"Set1"</span>),</span>
+<span id="cb15-12"><a href="#cb15-12"></a>                      <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">'#FFFFFF'</span>, <span class="at">width =</span> <span class="dv">1</span>)),</span>
+<span id="cb15-13"><a href="#cb15-13"></a>        <span class="at">showlegend =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">'Percentage of Data in Cluster'</span>,</span>
+<span id="cb15-15"><a href="#cb15-15"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">showgrid =</span> <span class="cn">FALSE</span>, <span class="at">zeroline =</span> <span class="cn">FALSE</span>, <span class="at">showticklabels =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb15-16"><a href="#cb15-16"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">showgrid =</span> <span class="cn">FALSE</span>, <span class="at">zeroline =</span> <span class="cn">FALSE</span>, <span class="at">showticklabels =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ee62a486956d83ec2227" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-ee62a486956d83ec2227">{"x":{"visdat":{"38442d852799":["function () ","plotlyVisDat"]},"cur_data":"38442d852799","attrs":{"38442d852799":{"labels":{},"values":{},"textposition":"inside","textinfo":"percent","insidetextfont":{"color":"#FFFFFF"},"hoverinfo":"text","text":{},"marker":{"colors":["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00"],"line":{"color":"#FFFFFF","width":1}},"showlegend":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage of Data in Cluster","xaxis":{"showgrid":false,"zeroline":false,"showticklabels":false},"yaxis":{"showgrid":false,"zeroline":false,"showticklabels":false},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["1","2","3","4","5"],"values":[53523,46695,54127,50797,24196],"textposition":["inside","inside","inside","inside","inside"],"textinfo":"percent","insidetextfont":{"color":"#FFFFFF"},"hoverinfo":["text","text","text","text","text"],"text":["Cluster: 1 <br>Count: 53523","Cluster: 2 <br>Count: 46695","Cluster: 3 <br>Count: 54127","Cluster: 4 <br>Count: 50797","Cluster: 5 <br>Count: 24196"],"marker":{"color":"rgba(31,119,180,1)","colors":["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00"],"line":{"color":"#FFFFFF","width":1}},"showlegend":false,"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="cluster-charactistic" class="level4">
+<h4 class="anchored" data-anchor-id="cluster-charactistic">Cluster Charactistic</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Bin continuous variables</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>data<span class="sc">$</span>floor_area_sqm_bin <span class="ot">&lt;-</span> <span class="fu">cut</span>(data<span class="sc">$</span>floor_area_sqm, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(data<span class="sc">$</span>floor_area_sqm), <span class="at">by =</span> <span class="dv">10</span>), <span class="at">include.lowest =</span> <span class="cn">TRUE</span>, <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>data<span class="sc">$</span>lease_commence_date_bin <span class="ot">&lt;-</span> <span class="fu">cut</span>(data<span class="sc">$</span>lease_commence_date, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(data<span class="sc">$</span>lease_commence_date), <span class="fu">max</span>(data<span class="sc">$</span>lease_commence_date), <span class="at">by =</span> <span class="dv">10</span>), <span class="at">include.lowest =</span> <span class="cn">TRUE</span>, <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>data<span class="sc">$</span>remaining_lease_bin <span class="ot">&lt;-</span> <span class="fu">cut</span>(data<span class="sc">$</span>remaining_lease, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(data<span class="sc">$</span>remaining_lease), <span class="at">by =</span> <span class="dv">10</span>), <span class="at">include.lowest =</span> <span class="cn">TRUE</span>, <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a></span>
+<span id="cb16-6"><a href="#cb16-6"></a>data<span class="sc">$</span>resale_price_bin <span class="ot">&lt;-</span> <span class="fu">cut</span>(data<span class="sc">$</span>resale_price, </span>
+<span id="cb16-7"><a href="#cb16-7"></a>                             <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(data<span class="sc">$</span>resale_price), <span class="fu">max</span>(data<span class="sc">$</span>resale_price), <span class="at">by =</span> <span class="dv">100000</span>),</span>
+<span id="cb16-8"><a href="#cb16-8"></a>                             <span class="at">include.lowest =</span> <span class="cn">TRUE</span>, <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-9"><a href="#cb16-9"></a></span>
+<span id="cb16-10"><a href="#cb16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co"># Define variables to plot</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a>variables_to_plot <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"town"</span>, <span class="st">"flat_type"</span>, <span class="st">"storey_range"</span>, <span class="st">"flat_model"</span>, <span class="st">"floor_area_sqm_bin"</span>, <span class="st">"lease_commence_date_bin"</span>, <span class="st">"remaining_lease_bin"</span>, <span class="st">"resale_price_bin"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13"></a></span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="co"># Create subplot function</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a>create_subplot <span class="ot">&lt;-</span> <span class="cf">function</span>(variable) {</span>
+<span id="cb16-16"><a href="#cb16-16"></a>  <span class="co"># Filter out missing values</span></span>
+<span id="cb16-17"><a href="#cb16-17"></a>  data_filtered <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb16-18"><a href="#cb16-18"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="fu">get</span>(variable)))</span>
+<span id="cb16-19"><a href="#cb16-19"></a>  </span>
+<span id="cb16-20"><a href="#cb16-20"></a>  <span class="co"># Calculate count of each category in each cluster</span></span>
+<span id="cb16-21"><a href="#cb16-21"></a>  count_by_cluster_category <span class="ot">&lt;-</span> data_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb16-22"><a href="#cb16-22"></a>    <span class="fu">group_by</span>(km_cluster, <span class="sc">!!</span><span class="fu">sym</span>(variable)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-23"><a href="#cb16-23"></a>    <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb16-24"><a href="#cb16-24"></a>  </span>
+<span id="cb16-25"><a href="#cb16-25"></a>  <span class="co"># Calculate proportion of each category in each cluster</span></span>
+<span id="cb16-26"><a href="#cb16-26"></a>  proportion_by_cluster_category <span class="ot">&lt;-</span> count_by_cluster_category <span class="sc">%&gt;%</span></span>
+<span id="cb16-27"><a href="#cb16-27"></a>    <span class="fu">group_by</span>(km_cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb16-28"><a href="#cb16-28"></a>    <span class="fu">mutate</span>(<span class="at">proportion =</span> count <span class="sc">/</span> <span class="fu">sum</span>(count))</span>
+<span id="cb16-29"><a href="#cb16-29"></a>  </span>
+<span id="cb16-30"><a href="#cb16-30"></a>  <span class="fu">plot_ly</span>(proportion_by_cluster_category, </span>
+<span id="cb16-31"><a href="#cb16-31"></a>        <span class="at">x =</span> <span class="sc">~</span><span class="fu">factor</span>(km_cluster), </span>
+<span id="cb16-32"><a href="#cb16-32"></a>        <span class="at">y =</span> <span class="sc">~</span>proportion, </span>
+<span id="cb16-33"><a href="#cb16-33"></a>        <span class="at">color =</span> <span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"~"</span>, variable)),</span>
+<span id="cb16-34"><a href="#cb16-34"></a>        <span class="at">type =</span> <span class="st">"bar"</span>, </span>
+<span id="cb16-35"><a href="#cb16-35"></a>        <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste</span>(<span class="st">"&lt;b&gt;"</span>, variable, <span class="st">"&lt;/b&gt;&lt;br&gt;"</span>,</span>
+<span id="cb16-36"><a href="#cb16-36"></a>                      <span class="fu">format</span>(<span class="fu">get</span>(variable), <span class="at">scientific =</span> <span class="cn">FALSE</span>), <span class="st">": "</span>, <span class="fu">round</span>(proportion <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
+<span id="cb16-37"><a href="#cb16-37"></a>        <span class="at">hoverinfo =</span> <span class="st">"text"</span>, </span>
+<span id="cb16-38"><a href="#cb16-38"></a>        <span class="at">name =</span> variable) <span class="sc">%&gt;%</span></span>
+<span id="cb16-39"><a href="#cb16-39"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Proportion of"</span>, variable, <span class="st">"in Each Cluster"</span>),</span>
+<span id="cb16-40"><a href="#cb16-40"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> variable),</span>
+<span id="cb16-41"><a href="#cb16-41"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion"</span>),</span>
+<span id="cb16-42"><a href="#cb16-42"></a>         <span class="at">barmode =</span> <span class="st">"stack"</span>,</span>
+<span id="cb16-43"><a href="#cb16-43"></a>         <span class="at">showlegend =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-44"><a href="#cb16-44"></a>         <span class="at">hovermode =</span> <span class="st">"x unified"</span>,</span>
+<span id="cb16-45"><a href="#cb16-45"></a>         <span class="at">font =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">8</span>))</span>
+<span id="cb16-46"><a href="#cb16-46"></a></span>
+<span id="cb16-47"><a href="#cb16-47"></a> </span>
+<span id="cb16-48"><a href="#cb16-48"></a>}</span>
+<span id="cb16-49"><a href="#cb16-49"></a></span>
+<span id="cb16-50"><a href="#cb16-50"></a><span class="co"># Create subplots</span></span>
+<span id="cb16-51"><a href="#cb16-51"></a>subplots <span class="ot">&lt;-</span> <span class="fu">lapply</span>(variables_to_plot, create_subplot)</span>
+<span id="cb16-52"><a href="#cb16-52"></a></span>
+<span id="cb16-53"><a href="#cb16-53"></a><span class="co"># Combine subplots</span></span>
+<span id="cb16-54"><a href="#cb16-54"></a><span class="fu">subplot</span>(subplots, <span class="at">nrows =</span> <span class="dv">1</span>,  <span class="at">shareX=</span> <span class="cn">TRUE</span>, <span class="at">shareY =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-55"><a href="#cb16-55"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"Cluster Composition"</span>, <span class="at">showlegend =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-7333ce767c4fae212ada" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-7333ce767c4fae212ada">{"x":{"data":[{"x":["1","2","3","4","5"],"y":[0.004801674046671524,0.023621372737980512,0.10881814990670091,0.04143945508593027,0.025748057530170277],"text":["<b> town <\/b><br> ANG MO KIO      :  0.48 %","<b> town <\/b><br> ANG MO KIO      :  2.36 %","<b> town <\/b><br> ANG MO KIO      :  10.88 %","<b> town <\/b><br> ANG MO KIO      :  4.14 %","<b> town <\/b><br> ANG MO KIO      :  2.57 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.014965528838069614,0.057457971945604452,0.11253163855377168,0.065850345492844062,0.021656472144156058],"text":["<b> town <\/b><br> BEDOK           :  1.5 %","<b> town <\/b><br> BEDOK           :  5.75 %","<b> town <\/b><br> BEDOK           :  11.25 %","<b> town <\/b><br> BEDOK           :  6.59 %","<b> town <\/b><br> BEDOK           :  2.17 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(161,182,146,1)","line":{"color":"rgba(161,182,146,1)"}},"textfont":{"color":"rgba(161,182,146,1)"},"error_y":{"color":"rgba(161,182,146,1)"},"error_x":{"color":"rgba(161,182,146,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0001494684528146778,0.021351322411393082,0.010124337206939235,0.037029745851132938,0.0079765250454620594],"text":["<b> town <\/b><br> BISHAN          :  0.01 %","<b> town <\/b><br> BISHAN          :  2.14 %","<b> town <\/b><br> BISHAN          :  1.01 %","<b> town <\/b><br> BISHAN          :  3.7 %","<b> town <\/b><br> BISHAN          :  0.8 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(201,168,127,1)","line":{"color":"rgba(201,168,127,1)"}},"textfont":{"color":"rgba(201,168,127,1)"},"error_y":{"color":"rgba(201,168,127,1)"},"error_x":{"color":"rgba(201,168,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.010107804121592586,0.033408287825248954,0.055887080385020417,0.05047542177687659,0.044718135228963465],"text":["<b> town <\/b><br> BUKIT BATOK     :  1.01 %","<b> town <\/b><br> BUKIT BATOK     :  3.34 %","<b> town <\/b><br> BUKIT BATOK     :  5.59 %","<b> town <\/b><br> BUKIT BATOK     :  5.05 %","<b> town <\/b><br> BUKIT BATOK     :  4.47 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(235,152,109,1)","line":{"color":"rgba(235,152,109,1)"}},"textfont":{"color":"rgba(235,152,109,1)"},"error_y":{"color":"rgba(235,152,109,1)"},"error_x":{"color":"rgba(235,152,109,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.010985931281878818,0.023193061355605525,0.059803794778945811,0.01939090891194362,0.084890064473466684],"text":["<b> town <\/b><br> BUKIT MERAH     :  1.1 %","<b> town <\/b><br> BUKIT MERAH     :  2.32 %","<b> town <\/b><br> BUKIT MERAH     :  5.98 %","<b> town <\/b><br> BUKIT MERAH     :  1.94 %","<b> town <\/b><br> BUKIT MERAH     :  8.49 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(242,144,111,1)","line":{"color":"rgba(242,144,111,1)"}},"textfont":{"color":"rgba(242,144,111,1)"},"error_y":{"color":"rgba(242,144,111,1)"},"error_x":{"color":"rgba(242,144,111,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.028417689591390616,0.048848913159867224,0.013338999020821401,0.043349016674213044,0.079558604728054219],"text":["<b> town <\/b><br> BUKIT PANJANG   :  2.84 %","<b> town <\/b><br> BUKIT PANJANG   :  4.88 %","<b> town <\/b><br> BUKIT PANJANG   :  1.33 %","<b> town <\/b><br> BUKIT PANJANG   :  4.33 %","<b> town <\/b><br> BUKIT PANJANG   :  7.96 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.0015205054074312024,0.002069207604337946,0.0040159851959761404],"text":["<b> town <\/b><br> BUKIT TIMAH     :  0.15 %","<b> town <\/b><br> BUKIT TIMAH     :  0.21 %","<b> town <\/b><br> BUKIT TIMAH     :  0.4 %"],"hoverinfo":["text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(187,155,170,1)","line":{"color":"rgba(187,155,170,1)"}},"textfont":{"color":"rgba(187,155,170,1)"},"error_y":{"color":"rgba(187,155,170,1)"},"error_x":{"color":"rgba(187,155,170,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[1.8683556601834725e-05,0.0010279473176999679,0.017200288211059175,0.0056696261590251391,0.0050834848735328156],"text":["<b> town <\/b><br> CENTRAL AREA    :  0 %","<b> town <\/b><br> CENTRAL AREA    :  0.1 %","<b> town <\/b><br> CENTRAL AREA    :  1.72 %","<b> town <\/b><br> CENTRAL AREA    :  0.57 %","<b> town <\/b><br> CENTRAL AREA    :  0.51 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(148,159,199,1)","line":{"color":"rgba(148,159,199,1)"}},"textfont":{"color":"rgba(148,159,199,1)"},"error_y":{"color":"rgba(148,159,199,1)"},"error_x":{"color":"rgba(148,159,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.047474917325262038,0.068529821179997855,0.0071868014114951874,0.066066893714195718,0.044056868903951066],"text":["<b> town <\/b><br> CHOA CHU KANG   :  4.75 %","<b> town <\/b><br> CHOA CHU KANG   :  6.85 %","<b> town <\/b><br> CHOA CHU KANG   :  0.72 %","<b> town <\/b><br> CHOA CHU KANG   :  6.61 %","<b> town <\/b><br> CHOA CHU KANG   :  4.41 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(166,156,201,1)","line":{"color":"rgba(166,156,201,1)"}},"textfont":{"color":"rgba(166,156,201,1)"},"error_y":{"color":"rgba(166,156,201,1)"},"error_x":{"color":"rgba(166,156,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0021486090092109932,0.0112003426491059,0.04707447299868827,0.023485638915683997,0.031616796164655313],"text":["<b> town <\/b><br> CLEMENTI        :  0.21 %","<b> town <\/b><br> CLEMENTI        :  1.12 %","<b> town <\/b><br> CLEMENTI        :  4.71 %","<b> town <\/b><br> CLEMENTI        :  2.35 %","<b> town <\/b><br> CLEMENTI        :  3.16 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(192,150,199,1)","line":{"color":"rgba(192,150,199,1)"}},"textfont":{"color":"rgba(192,150,199,1)"},"error_y":{"color":"rgba(192,150,199,1)"},"error_x":{"color":"rgba(192,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0023354445752293406,0.015119391797837027,0.054834001514955565,0.028289072189302517,0.026533311291122498],"text":["<b> town <\/b><br> GEYLANG         :  0.23 %","<b> town <\/b><br> GEYLANG         :  1.51 %","<b> town <\/b><br> GEYLANG         :  5.48 %","<b> town <\/b><br> GEYLANG         :  2.83 %","<b> town <\/b><br> GEYLANG         :  2.65 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.029501335874297031,0.064482278616554228,0.04260350656788664,0.079965352284583735,0.033063316250619937],"text":["<b> town <\/b><br> HOUGANG         :  2.95 %","<b> town <\/b><br> HOUGANG         :  6.45 %","<b> town <\/b><br> HOUGANG         :  4.26 %","<b> town <\/b><br> HOUGANG         :  8 %","<b> town <\/b><br> HOUGANG         :  3.31 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(228,146,187,1)","line":{"color":"rgba(228,146,187,1)"}},"textfont":{"color":"rgba(228,146,187,1)"},"error_y":{"color":"rgba(228,146,187,1)"},"error_x":{"color":"rgba(228,146,187,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0024662294714421838,0.030838419530999035,0.032294418681988658,0.022993483867157508,0.021367168126963133],"text":["<b> town <\/b><br> JURONG EAST     :  0.25 %","<b> town <\/b><br> JURONG EAST     :  3.08 %","<b> town <\/b><br> JURONG EAST     :  3.23 %","<b> town <\/b><br> JURONG EAST     :  2.3 %","<b> town <\/b><br> JURONG EAST     :  2.14 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(214,170,159,1)","line":{"color":"rgba(214,170,159,1)"}},"textfont":{"color":"rgba(214,170,159,1)"},"error_y":{"color":"rgba(214,170,159,1)"},"error_x":{"color":"rgba(214,170,159,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.10956037591315883,0.084891315986722352,0.053725497441203099,0.062543063566746063,0.032236733344354437],"text":["<b> town <\/b><br> JURONG WEST     :  10.96 %","<b> town <\/b><br> JURONG WEST     :  8.49 %","<b> town <\/b><br> JURONG WEST     :  5.37 %","<b> town <\/b><br> JURONG WEST     :  6.25 %","<b> town <\/b><br> JURONG WEST     :  3.22 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(196,191,129,1)","line":{"color":"rgba(196,191,129,1)"}},"textfont":{"color":"rgba(196,191,129,1)"},"error_y":{"color":"rgba(196,191,129,1)"},"error_x":{"color":"rgba(196,191,129,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0042972180184219864,0.019231181068636898,0.05520350287287306,0.02342658030986082,0.04558604728054224],"text":["<b> town <\/b><br> KALLANG/WHAMPOA :  0.43 %","<b> town <\/b><br> KALLANG/WHAMPOA :  1.92 %","<b> town <\/b><br> KALLANG/WHAMPOA :  5.52 %","<b> town <\/b><br> KALLANG/WHAMPOA :  2.34 %","<b> town <\/b><br> KALLANG/WHAMPOA :  4.56 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(174,211,95,1)","line":{"color":"rgba(174,211,95,1)"}},"textfont":{"color":"rgba(174,211,95,1)"},"error_y":{"color":"rgba(174,211,95,1)"},"error_x":{"color":"rgba(174,211,95,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.0049255808973123457,0.015075655403033607,0.0061814674094926867],"text":["<b> town <\/b><br> MARINE PARADE   :  0.49 %","<b> town <\/b><br> MARINE PARADE   :  1.51 %","<b> town <\/b><br> MARINE PARADE   :  0.62 %"],"hoverinfo":["text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0066326625936513279,0.085169718385266088,0.0010530788700648475,0.05047542177687659,0.010249628037692181],"text":["<b> town <\/b><br> PASIR RIS       :  0.66 %","<b> town <\/b><br> PASIR RIS       :  8.52 %","<b> town <\/b><br> PASIR RIS       :  0.11 %","<b> town <\/b><br> PASIR RIS       :  5.05 %","<b> town <\/b><br> PASIR RIS       :  1.02 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(211,217,68,1)","line":{"color":"rgba(211,217,68,1)"}},"textfont":{"color":"rgba(211,217,68,1)"},"error_y":{"color":"rgba(211,217,68,1)"},"error_x":{"color":"rgba(211,217,68,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","5"],"y":[0.19684995235693067,0.014948067244887033,0.14787568193089767],"text":["<b> town <\/b><br> PUNGGOL         :  19.68 %","<b> town <\/b><br> PUNGGOL         :  1.49 %","<b> town <\/b><br> PUNGGOL         :  14.79 %"],"hoverinfo":["text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(235,217,58,1)","line":{"color":"rgba(235,217,58,1)"}},"textfont":{"color":"rgba(235,217,58,1)"},"error_y":{"color":"rgba(235,217,58,1)"},"error_x":{"color":"rgba(235,217,58,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0051379780655045493,0.0069814755327122814,0.050473885491529182,0.0093115735181211485,0.068771697801289472],"text":["<b> town <\/b><br> QUEENSTOWN      :  0.51 %","<b> town <\/b><br> QUEENSTOWN      :  0.7 %","<b> town <\/b><br> QUEENSTOWN      :  5.05 %","<b> town <\/b><br> QUEENSTOWN      :  0.93 %","<b> town <\/b><br> QUEENSTOWN      :  6.88 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(254,216,53,1)","line":{"color":"rgba(254,216,53,1)"}},"textfont":{"color":"rgba(254,216,53,1)"},"error_y":{"color":"rgba(254,216,53,1)"},"error_x":{"color":"rgba(254,216,53,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.023634699101320926,0.04582931791412357,9.2375339479372587e-05,0.029686792527117742,0.05476111754008927],"text":["<b> town <\/b><br> SEMBAWANG       :  2.36 %","<b> town <\/b><br> SEMBAWANG       :  4.58 %","<b> town <\/b><br> SEMBAWANG       :  0.01 %","<b> town <\/b><br> SEMBAWANG       :  2.97 %","<b> town <\/b><br> SEMBAWANG       :  5.48 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(248,210,88,1)","line":{"color":"rgba(248,210,88,1)"}},"textfont":{"color":"rgba(248,210,88,1)"},"error_y":{"color":"rgba(248,210,88,1)"},"error_x":{"color":"rgba(248,210,88,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","4","5"],"y":[0.25149935541729723,0.041160723846236216,1.9686201941059511e-05,0.13237725243841958],"text":["<b> town <\/b><br> SENGKANG        :  25.15 %","<b> town <\/b><br> SENGKANG        :  4.12 %","<b> town <\/b><br> SENGKANG        :  0 %","<b> town <\/b><br> SENGKANG        :  13.24 %"],"hoverinfo":["text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2","3","4","5"],"y":[0.025827176357211695,0.021338703419735067,0.039608638305411739,0.0013225326500247974],"text":["<b> town <\/b><br> SERANGOON       :  2.58 %","<b> town <\/b><br> SERANGOON       :  2.13 %","<b> town <\/b><br> SERANGOON       :  3.96 %","<b> town <\/b><br> SERANGOON       :  0.13 %"],"hoverinfo":["text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(233,198,138,1)","line":{"color":"rgba(233,198,138,1)"}},"textfont":{"color":"rgba(233,198,138,1)"},"error_y":{"color":"rgba(233,198,138,1)"},"error_x":{"color":"rgba(233,198,138,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.027035106402854846,0.11819252596637755,0.05889851645204796,0.10900250014764651,0.012398743593982476],"text":["<b> town <\/b><br> TAMPINES        :  2.7 %","<b> town <\/b><br> TAMPINES        :  11.82 %","<b> town <\/b><br> TAMPINES        :  5.89 %","<b> town <\/b><br> TAMPINES        :  10.9 %","<b> town <\/b><br> TAMPINES        :  1.24 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(222,193,153,1)","line":{"color":"rgba(222,193,153,1)"}},"textfont":{"color":"rgba(222,193,153,1)"},"error_y":{"color":"rgba(222,193,153,1)"},"error_x":{"color":"rgba(222,193,153,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0031388375091082337,0.017089624156761966,0.073419919818205337,0.017146681890662836,0.036039014713175735],"text":["<b> town <\/b><br> TOA PAYOH       :  0.31 %","<b> town <\/b><br> TOA PAYOH       :  1.71 %","<b> town <\/b><br> TOA PAYOH       :  7.34 %","<b> town <\/b><br> TOA PAYOH       :  1.71 %","<b> town <\/b><br> TOA PAYOH       :  3.6 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(208,188,162,1)","line":{"color":"rgba(208,188,162,1)"}},"textfont":{"color":"rgba(208,188,162,1)"},"error_y":{"color":"rgba(208,188,162,1)"},"error_x":{"color":"rgba(208,188,162,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.15189731517291633,0.084677160295534848,0.030169785873963087,0.058664881784357345,0.014217225987766573],"text":["<b> town <\/b><br> WOODLANDS       :  15.19 %","<b> town <\/b><br> WOODLANDS       :  8.47 %","<b> town <\/b><br> WOODLANDS       :  3.02 %","<b> town <\/b><br> WOODLANDS       :  5.87 %","<b> town <\/b><br> WOODLANDS       :  1.42 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(194,184,171,1)","line":{"color":"rgba(194,184,171,1)"}},"textfont":{"color":"rgba(194,184,171,1)"},"error_y":{"color":"rgba(194,184,171,1)"},"error_x":{"color":"rgba(194,184,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.066943183304373821,0.050476496412892174,0.076782382175254488,0.10591176644290017,0.017895519920648043],"text":["<b> town <\/b><br> YISHUN          :  6.69 %","<b> town <\/b><br> YISHUN          :  5.05 %","<b> town <\/b><br> YISHUN          :  7.68 %","<b> town <\/b><br> YISHUN          :  10.59 %","<b> town <\/b><br> YISHUN          :  1.79 %"],"hoverinfo":["text","text","text","text","text"],"name":"town","type":"bar","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["3"],"y":[0.0019029319932750753],"text":"<b> flat_type <\/b><br> 1 ROOM           :  0.19 %","hoverinfo":"text","name":"flat_type","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["1","2","3","5"],"y":[0.031052071072249315,0.00064246707356247997,0.03079793818242282,0.0093403868408001318],"text":["<b> flat_type <\/b><br> 2 ROOM           :  3.11 %","<b> flat_type <\/b><br> 2 ROOM           :  0.06 %","<b> flat_type <\/b><br> 2 ROOM           :  3.08 %","<b> flat_type <\/b><br> 2 ROOM           :  0.93 %"],"hoverinfo":["text","text","text","text"],"name":"flat_type","type":"bar","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.1021243203856286,0.0024627904486561728,0.93714781901823485,0.0072642085162509598,0.12026781286163002],"text":["<b> flat_type <\/b><br> 3 ROOM           :  10.21 %","<b> flat_type <\/b><br> 3 ROOM           :  0.25 %","<b> flat_type <\/b><br> 3 ROOM           :  93.71 %","<b> flat_type <\/b><br> 3 ROOM           :  0.73 %","<b> flat_type <\/b><br> 3 ROOM           :  12.03 %"],"hoverinfo":["text","text","text","text","text"],"name":"flat_type","type":"bar","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.53201427423724379,0.0011136095941749653,0.02887653112125187,0.99246018465657426,0.65572821954041993],"text":["<b> flat_type <\/b><br> 4 ROOM           :  53.2 %","<b> flat_type <\/b><br> 4 ROOM           :  0.11 %","<b> flat_type <\/b><br> 4 ROOM           :  2.89 %","<b> flat_type <\/b><br> 4 ROOM           :  99.25 %","<b> flat_type <\/b><br> 4 ROOM           :  65.57 %"],"hoverinfo":["text","text","text","text","text"],"name":"flat_type","type":"bar","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.3348093343048783,0.65842167255594819,0.0012747796848153418,0.00027560682717483315,0.21433294759464375],"text":["<b> flat_type <\/b><br> 5 ROOM           :  33.48 %","<b> flat_type <\/b><br> 5 ROOM           :  65.84 %","<b> flat_type <\/b><br> 5 ROOM           :  0.13 %","<b> flat_type <\/b><br> 5 ROOM           :  0.03 %","<b> flat_type <\/b><br> 5 ROOM           :  21.43 %"],"hoverinfo":["text","text","text","text","text"],"name":"flat_type","type":"bar","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["2","5"],"y":[0.33624585073348323,0.00033063316250619935],"text":["<b> flat_type <\/b><br> EXECUTIVE        :  33.62 %","<b> flat_type <\/b><br> EXECUTIVE        :  0.03 %"],"hoverinfo":["text","text"],"name":"flat_type","type":"bar","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["2"],"y":[0.0011136095941749653],"text":"<b> flat_type <\/b><br> MULTI-GENERATION :  0.11 %","hoverinfo":"text","name":"flat_type","type":"bar","marker":{"color":"rgba(229,196,148,1)","line":{"color":"rgba(229,196,148,1)"}},"textfont":{"color":"rgba(229,196,148,1)"},"error_y":{"color":"rgba(229,196,148,1)"},"error_x":{"color":"rgba(229,196,148,1)"},"xaxis":"x2","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.15447564598396951,0.20721704679301853,0.22114656271361796,0.21751284524676653,0.070052901306000989],"text":["<b> storey_range <\/b><br> 01 TO 03 :  15.45 %","<b> storey_range <\/b><br> 01 TO 03 :  20.72 %","<b> storey_range <\/b><br> 01 TO 03 :  22.11 %","<b> storey_range <\/b><br> 01 TO 03 :  21.75 %","<b> storey_range <\/b><br> 01 TO 03 :  7.01 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.26304579339723111,0.24120355498447371,0.27828994771555787,0.28196547040179537,0.0012812035047115226],"text":["<b> storey_range <\/b><br> 04 TO 06 :  26.3 %","<b> storey_range <\/b><br> 04 TO 06 :  24.12 %","<b> storey_range <\/b><br> 04 TO 06 :  27.83 %","<b> storey_range <\/b><br> 04 TO 06 :  28.2 %","<b> storey_range <\/b><br> 04 TO 06 :  0.13 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(185,175,135,1)","line":{"color":"rgba(185,175,135,1)"}},"textfont":{"color":"rgba(185,175,135,1)"},"error_y":{"color":"rgba(185,175,135,1)"},"error_x":{"color":"rgba(185,175,135,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.25338639463408252,0.21796766249063068,0.2400465571710976,0.24777053763017501,0.016862291287816168],"text":["<b> storey_range <\/b><br> 07 TO 09 :  25.34 %","<b> storey_range <\/b><br> 07 TO 09 :  21.8 %","<b> storey_range <\/b><br> 07 TO 09 :  24 %","<b> storey_range <\/b><br> 07 TO 09 :  24.78 %","<b> storey_range <\/b><br> 07 TO 09 :  1.69 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(239,150,106,1)","line":{"color":"rgba(239,150,106,1)"}},"textfont":{"color":"rgba(239,150,106,1)"},"error_y":{"color":"rgba(239,150,106,1)"},"error_x":{"color":"rgba(239,150,106,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.23068587336285334,0.19299710889816896,0.19287970883292996,0.20534677244719177,0.053851876343197221],"text":["<b> storey_range <\/b><br> 10 TO 12 :  23.07 %","<b> storey_range <\/b><br> 10 TO 12 :  19.3 %","<b> storey_range <\/b><br> 10 TO 12 :  19.29 %","<b> storey_range <\/b><br> 10 TO 12 :  20.53 %","<b> storey_range <\/b><br> 10 TO 12 :  5.39 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(225,148,131,1)","line":{"color":"rgba(225,148,131,1)"}},"textfont":{"color":"rgba(225,148,131,1)"},"error_y":{"color":"rgba(225,148,131,1)"},"error_x":{"color":"rgba(225,148,131,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.090353679726472735,0.087332690866259777,0.044949840190662699,0.040711065614111072,0.30918333608860971],"text":["<b> storey_range <\/b><br> 13 TO 15 :  9.04 %","<b> storey_range <\/b><br> 13 TO 15 :  8.73 %","<b> storey_range <\/b><br> 13 TO 15 :  4.49 %","<b> storey_range <\/b><br> 13 TO 15 :  4.07 %","<b> storey_range <\/b><br> 13 TO 15 :  30.92 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(178,156,177,1)","line":{"color":"rgba(178,156,177,1)"}},"textfont":{"color":"rgba(178,156,177,1)"},"error_y":{"color":"rgba(178,156,177,1)"},"error_x":{"color":"rgba(178,156,177,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0075855239803448984,0.028504122497055358,0.014410552958782123,0.0043900230328562714,0.2634733013721276],"text":["<b> storey_range <\/b><br> 16 TO 18 :  0.76 %","<b> storey_range <\/b><br> 16 TO 18 :  2.85 %","<b> storey_range <\/b><br> 16 TO 18 :  1.44 %","<b> storey_range <\/b><br> 16 TO 18 :  0.44 %","<b> storey_range <\/b><br> 16 TO 18 :  26.35 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(161,157,201,1)","line":{"color":"rgba(161,157,201,1)"}},"textfont":{"color":"rgba(161,157,201,1)"},"error_y":{"color":"rgba(161,157,201,1)"},"error_x":{"color":"rgba(161,157,201,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.00044840535844403338,0.012870757040368348,0.0062445729488055865,0.0014567789436384039,0.10543064969416432],"text":["<b> storey_range <\/b><br> 19 TO 21 :  0.04 %","<b> storey_range <\/b><br> 19 TO 21 :  1.29 %","<b> storey_range <\/b><br> 19 TO 21 :  0.62 %","<b> storey_range <\/b><br> 19 TO 21 :  0.15 %","<b> storey_range <\/b><br> 19 TO 21 :  10.54 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(201,148,198,1)","line":{"color":"rgba(201,148,198,1)"}},"textfont":{"color":"rgba(201,148,198,1)"},"error_y":{"color":"rgba(201,148,198,1)"},"error_x":{"color":"rgba(201,148,198,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[1.8683556601834725e-05,0.0094442659813684555,0.0019768322648585734,0.00080713427958343999,0.073979170110762105],"text":["<b> storey_range <\/b><br> 22 TO 24 :  0 %","<b> storey_range <\/b><br> 22 TO 24 :  0.94 %","<b> storey_range <\/b><br> 22 TO 24 :  0.2 %","<b> storey_range <\/b><br> 22 TO 24 :  0.08 %","<b> storey_range <\/b><br> 22 TO 24 :  7.4 %"],"hoverinfo":["text","text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(228,144,189,1)","line":{"color":"rgba(228,144,189,1)"}},"textfont":{"color":"rgba(228,144,189,1)"},"error_y":{"color":"rgba(228,144,189,1)"},"error_x":{"color":"rgba(228,144,189,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["2","3","4","5"],"y":[0.0024627904486561728,5.542520368762355e-05,3.9372403882119021e-05,0.046660605058687389],"text":["<b> storey_range <\/b><br> 25 TO 27 :  0.25 %","<b> storey_range <\/b><br> 25 TO 27 :  0.01 %","<b> storey_range <\/b><br> 25 TO 27 :  0 %","<b> storey_range <\/b><br> 25 TO 27 :  4.67 %"],"hoverinfo":["text","text","text","text"],"name":"storey_range","type":"bar","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.026987931889568523],"text":"<b> storey_range <\/b><br> 28 TO 30 :  2.7 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(172,212,93,1)","line":{"color":"rgba(172,212,93,1)"}},"textfont":{"color":"rgba(172,212,93,1)"},"error_y":{"color":"rgba(172,212,93,1)"},"error_x":{"color":"rgba(172,212,93,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.011406844106463879],"text":"<b> storey_range <\/b><br> 31 TO 33 :  1.14 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(202,217,72,1)","line":{"color":"rgba(202,217,72,1)"}},"textfont":{"color":"rgba(202,217,72,1)"},"error_y":{"color":"rgba(202,217,72,1)"},"error_x":{"color":"rgba(202,217,72,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.0095057034220532317],"text":"<b> storey_range <\/b><br> 34 TO 36 :  0.95 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(240,217,56,1)","line":{"color":"rgba(240,217,56,1)"}},"textfont":{"color":"rgba(240,217,56,1)"},"error_y":{"color":"rgba(240,217,56,1)"},"error_x":{"color":"rgba(240,217,56,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.0081005124814018843],"text":"<b> storey_range <\/b><br> 37 TO 39 :  0.81 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(250,212,80,1)","line":{"color":"rgba(250,212,80,1)"}},"textfont":{"color":"rgba(250,212,80,1)"},"error_y":{"color":"rgba(250,212,80,1)"},"error_x":{"color":"rgba(250,212,80,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.0029343693172425196],"text":"<b> storey_range <\/b><br> 40 TO 42 :  0.29 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(239,202,122,1)","line":{"color":"rgba(239,202,122,1)"}},"textfont":{"color":"rgba(239,202,122,1)"},"error_y":{"color":"rgba(239,202,122,1)"},"error_x":{"color":"rgba(239,202,122,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[0.00020664572656637459],"text":"<b> storey_range <\/b><br> 43 TO 45 :  0.02 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(223,194,152,1)","line":{"color":"rgba(223,194,152,1)"}},"textfont":{"color":"rgba(223,194,152,1)"},"error_y":{"color":"rgba(223,194,152,1)"},"error_x":{"color":"rgba(223,194,152,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["5"],"y":[8.2658290626549838e-05],"text":"<b> storey_range <\/b><br> 46 TO 48 :  0.01 %","hoverinfo":"text","name":"storey_range","type":"bar","marker":{"color":"rgba(202,186,166,1)","line":{"color":"rgba(202,186,166,1)"}},"textfont":{"color":"rgba(202,186,166,1)"},"error_y":{"color":"rgba(202,186,166,1)"},"error_x":{"color":"rgba(202,186,166,1)"},"xaxis":"x3","yaxis":"y","frame":null},{"x":["1","2","3","5"],"y":[0.00061655736786054595,0.00064246707356247997,0.0001108504073752471,8.2658290626549838e-05],"text":["<b> flat_model <\/b><br> 2-room                 :  0.06 %","<b> flat_model <\/b><br> 2-room                 :  0.06 %","<b> flat_model <\/b><br> 2-room                 :  0.01 %","<b> flat_model <\/b><br> 2-room                 :  0.01 %"],"hoverinfo":["text","text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.00051397365884998394],"text":"<b> flat_model <\/b><br> 3Gen                   :  0.05 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(172,179,141,1)","line":{"color":"rgba(172,179,141,1)"}},"textfont":{"color":"rgba(172,179,141,1)"},"error_y":{"color":"rgba(172,179,141,1)"},"error_x":{"color":"rgba(172,179,141,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.0064675018738622981,0.0002032257468546197,1.9686201941059511e-05],"text":["<b> flat_model <\/b><br> Adjoined flat          :  0.65 %","<b> flat_model <\/b><br> Adjoined flat          :  0.02 %","<b> flat_model <\/b><br> Adjoined flat          :  0 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(219,161,118,1)","line":{"color":"rgba(219,161,118,1)"}},"textfont":{"color":"rgba(219,161,118,1)"},"error_y":{"color":"rgba(219,161,118,1)"},"error_x":{"color":"rgba(219,161,118,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.17595031587964449],"text":"<b> flat_model <\/b><br> Apartment              :  17.6 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(248,142,103,1)","line":{"color":"rgba(248,142,103,1)"}},"textfont":{"color":"rgba(248,142,103,1)"},"error_y":{"color":"rgba(248,142,103,1)"},"error_x":{"color":"rgba(248,142,103,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","5"],"y":[0.015488668422920987,0.014112860049255809,0.029922301206811042],"text":["<b> flat_model <\/b><br> DBSS                   :  1.55 %","<b> flat_model <\/b><br> DBSS                   :  1.41 %","<b> flat_model <\/b><br> DBSS                   :  2.99 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.24245651402200924,0.46750187386229791,0.31575738540839138,0.032836584837687262,0.15973714663580757],"text":["<b> flat_model <\/b><br> Improved               :  24.25 %","<b> flat_model <\/b><br> Improved               :  46.75 %","<b> flat_model <\/b><br> Improved               :  31.58 %","<b> flat_model <\/b><br> Improved               :  3.28 %","<b> flat_model <\/b><br> Improved               :  15.97 %"],"hoverinfo":["text","text","text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(178,156,177,1)","line":{"color":"rgba(178,156,177,1)"}},"textfont":{"color":"rgba(178,156,177,1)"},"error_y":{"color":"rgba(178,156,177,1)"},"error_x":{"color":"rgba(178,156,177,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.00068529821179997858],"text":"<b> flat_model <\/b><br> Improved-Maisonette    :  0.07 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(152,158,202,1)","line":{"color":"rgba(152,158,202,1)"}},"textfont":{"color":"rgba(152,158,202,1)"},"error_y":{"color":"rgba(152,158,202,1)"},"error_x":{"color":"rgba(152,158,202,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.11517293072063391],"text":"<b> flat_model <\/b><br> Maisonette             :  11.52 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(185,152,199,1)","line":{"color":"rgba(185,152,199,1)"}},"textfont":{"color":"rgba(185,152,199,1)"},"error_y":{"color":"rgba(185,152,199,1)"},"error_x":{"color":"rgba(185,152,199,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.42910524447433812,0.061184280972266837,0.14486300737155208,0.5580053940193318,0.60865432302859979],"text":["<b> flat_model <\/b><br> Model A                :  42.91 %","<b> flat_model <\/b><br> Model A                :  6.12 %","<b> flat_model <\/b><br> Model A                :  14.49 %","<b> flat_model <\/b><br> Model A                :  55.8 %","<b> flat_model <\/b><br> Model A                :  60.87 %"],"hoverinfo":["text","text","text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.0063175928900310527],"text":"<b> flat_model <\/b><br> Model A-Maisonette     :  0.63 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(224,152,180,1)","line":{"color":"rgba(224,152,180,1)"}},"textfont":{"color":"rgba(224,152,180,1)"},"error_y":{"color":"rgba(224,152,180,1)"},"error_x":{"color":"rgba(224,152,180,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","4","5"],"y":[0.041066457410832723,0.014193751599503908,0.0040502562407009422],"text":["<b> flat_model <\/b><br> Model A2               :  4.11 %","<b> flat_model <\/b><br> Model A2               :  1.42 %","<b> flat_model <\/b><br> Model A2               :  0.41 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.0011136095941749653],"text":"<b> flat_model <\/b><br> Multi Generation       :  0.11 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(180,206,104,1)","line":{"color":"rgba(180,206,104,1)"}},"textfont":{"color":"rgba(180,206,104,1)"},"error_y":{"color":"rgba(180,206,104,1)"},"error_x":{"color":"rgba(180,206,104,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","3","4","5"],"y":[0.00063524092446238069,0.40004064514937093,0.23060416953757112,0.00012398743593982476],"text":["<b> flat_model <\/b><br> New Generation         :  0.06 %","<b> flat_model <\/b><br> New Generation         :  40 %","<b> flat_model <\/b><br> New Generation         :  23.06 %","<b> flat_model <\/b><br> New Generation         :  0.01 %"],"hoverinfo":["text","text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","4","5"],"y":[0.26936083552865125,0.098168968840346926,0.020906746461405203,0.19610679451148949],"text":["<b> flat_model <\/b><br> Premium Apartment      :  26.94 %","<b> flat_model <\/b><br> Premium Apartment      :  9.82 %","<b> flat_model <\/b><br> Premium Apartment      :  2.09 %","<b> flat_model <\/b><br> Premium Apartment      :  19.61 %"],"hoverinfo":["text","text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(217,217,66,1)","line":{"color":"rgba(217,217,66,1)"}},"textfont":{"color":"rgba(217,217,66,1)"},"error_y":{"color":"rgba(217,217,66,1)"},"error_x":{"color":"rgba(217,217,66,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2","5"],"y":[0.00017132455294999465,8.2658290626549838e-05],"text":["<b> flat_model <\/b><br> Premium Apartment Loft :  0.02 %","<b> flat_model <\/b><br> Premium Apartment Loft :  0.01 %"],"hoverinfo":["text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(247,217,52,1)","line":{"color":"rgba(247,217,52,1)"}},"textfont":{"color":"rgba(247,217,52,1)"},"error_y":{"color":"rgba(247,217,52,1)"},"error_x":{"color":"rgba(247,217,52,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.00023557126030624264],"text":"<b> flat_model <\/b><br> Premium Maisonette     :  0.02 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(250,212,80,1)","line":{"color":"rgba(250,212,80,1)"}},"textfont":{"color":"rgba(250,212,80,1)"},"error_y":{"color":"rgba(250,212,80,1)"},"error_x":{"color":"rgba(250,212,80,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","3","4"],"y":[0.0012517982923229266,0.054372124817558702,0.14331555013091324],"text":["<b> flat_model <\/b><br> Simplified             :  0.13 %","<b> flat_model <\/b><br> Simplified             :  5.44 %","<b> flat_model <\/b><br> Simplified             :  14.33 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.049962522754042192,0.084652761098897036,0.00011811721164635706],"text":["<b> flat_model <\/b><br> Standard               :  5 %","<b> flat_model <\/b><br> Standard               :  8.47 %","<b> flat_model <\/b><br> Standard               :  0.01 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(231,197,144,1)","line":{"color":"rgba(231,197,144,1)"}},"textfont":{"color":"rgba(231,197,144,1)"},"error_y":{"color":"rgba(231,197,144,1)"},"error_x":{"color":"rgba(231,197,144,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[0.0014562587000749546],"text":"<b> flat_model <\/b><br> Terrace                :  0.15 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(215,191,158,1)","line":{"color":"rgba(215,191,158,1)"}},"textfont":{"color":"rgba(215,191,158,1)"},"error_y":{"color":"rgba(215,191,158,1)"},"error_x":{"color":"rgba(215,191,158,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","5"],"y":[1.8683556601834725e-05,0.00032123353678123999,0.0012398743593982477],"text":["<b> flat_model <\/b><br> Type S1                :  0 %","<b> flat_model <\/b><br> Type S1                :  0.03 %","<b> flat_model <\/b><br> Type S1                :  0.12 %"],"hoverinfo":["text","text","text"],"name":"flat_model","type":"bar","marker":{"color":"rgba(198,185,168,1)","line":{"color":"rgba(198,185,168,1)"}},"textfont":{"color":"rgba(198,185,168,1)"},"error_y":{"color":"rgba(198,185,168,1)"},"error_x":{"color":"rgba(198,185,168,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["2"],"y":[2.1415569118749331e-05],"text":"<b> flat_model <\/b><br> Type S2                :  0 %","hoverinfo":"text","name":"flat_model","type":"bar","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x4","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.073893466360256344,0.0091446438514584307,0.00092375339479372584,0.50914424080162213,0.077285501735824103],"text":["<b> floor_area_sqm_bin <\/b><br> [100,110) :  7.39 %","<b> floor_area_sqm_bin <\/b><br> [100,110) :  0.91 %","<b> floor_area_sqm_bin <\/b><br> [100,110) :  0.09 %","<b> floor_area_sqm_bin <\/b><br> [100,110) :  50.91 %","<b> floor_area_sqm_bin <\/b><br> [100,110) :  7.73 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.29673224595033909,0.15466655244785196,0.0004434016295009884,0.033683091521152821,0.19135394280046289],"text":["<b> floor_area_sqm_bin <\/b><br> [110,120) :  29.67 %","<b> floor_area_sqm_bin <\/b><br> [110,120) :  15.47 %","<b> floor_area_sqm_bin <\/b><br> [110,120) :  0.04 %","<b> floor_area_sqm_bin <\/b><br> [110,120) :  3.37 %","<b> floor_area_sqm_bin <\/b><br> [110,120) :  19.14 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(180,206,104,1)","line":{"color":"rgba(180,206,104,1)"}},"textfont":{"color":"rgba(180,206,104,1)"},"error_y":{"color":"rgba(180,206,104,1)"},"error_x":{"color":"rgba(180,206,104,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.036171365581152026,0.43504518781856344,1.8475067895874519e-05,0.001043368702876154,0.019590014878492313],"text":["<b> floor_area_sqm_bin <\/b><br> [120,130) :  3.62 %","<b> floor_area_sqm_bin <\/b><br> [120,130) :  43.5 %","<b> floor_area_sqm_bin <\/b><br> [120,130) :  0 %","<b> floor_area_sqm_bin <\/b><br> [120,130) :  0.1 %","<b> floor_area_sqm_bin <\/b><br> [120,130) :  1.96 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","4","5"],"y":[5.6050669805504172e-05,0.13571336788452479,0.00051184125046754728,0.00045462059844602416],"text":["<b> floor_area_sqm_bin <\/b><br> [130,140) :  0.01 %","<b> floor_area_sqm_bin <\/b><br> [130,140) :  13.57 %","<b> floor_area_sqm_bin <\/b><br> [130,140) :  0.05 %","<b> floor_area_sqm_bin <\/b><br> [130,140) :  0.05 %"],"hoverinfo":["text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(217,217,66,1)","line":{"color":"rgba(217,217,66,1)"}},"textfont":{"color":"rgba(217,217,66,1)"},"error_y":{"color":"rgba(217,217,66,1)"},"error_x":{"color":"rgba(217,217,66,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.20640767550434747],"text":"<b> floor_area_sqm_bin <\/b><br> [140,150) :  20.64 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(247,217,52,1)","line":{"color":"rgba(247,217,52,1)"}},"textfont":{"color":"rgba(247,217,52,1)"},"error_y":{"color":"rgba(247,217,52,1)"},"error_x":{"color":"rgba(247,217,52,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.038634514070330236],"text":"<b> floor_area_sqm_bin <\/b><br> [150,160) :  3.86 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(250,212,80,1)","line":{"color":"rgba(250,212,80,1)"}},"textfont":{"color":"rgba(250,212,80,1)"},"error_y":{"color":"rgba(250,212,80,1)"},"error_x":{"color":"rgba(250,212,80,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.0060821518824688394],"text":"<b> floor_area_sqm_bin <\/b><br> [160,170) :  0.61 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.0079239302694136295],"text":"<b> floor_area_sqm_bin <\/b><br> [170,180) :  0.79 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(231,197,144,1)","line":{"color":"rgba(231,197,144,1)"}},"textfont":{"color":"rgba(231,197,144,1)"},"error_y":{"color":"rgba(231,197,144,1)"},"error_x":{"color":"rgba(231,197,144,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.0020559386644965092],"text":"<b> floor_area_sqm_bin <\/b><br> [180,190) :  0.21 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(215,191,158,1)","line":{"color":"rgba(215,191,158,1)"}},"textfont":{"color":"rgba(215,191,158,1)"},"error_y":{"color":"rgba(215,191,158,1)"},"error_x":{"color":"rgba(215,191,158,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2"],"y":[0.0011350494710241144],"text":"<b> floor_area_sqm_bin <\/b><br> [190,200) :  0.11 %","hoverinfo":"text","name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(198,185,168,1)","line":{"color":"rgba(198,185,168,1)"}},"textfont":{"color":"rgba(198,185,168,1)"},"error_y":{"color":"rgba(198,185,168,1)"},"error_x":{"color":"rgba(198,185,168,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","5"],"y":[0.0016067858677577863,2.141602775517197e-05,0.0028821105917564249,0.000537278889072574],"text":["<b> floor_area_sqm_bin <\/b><br> [30,40)   :  0.16 %","<b> floor_area_sqm_bin <\/b><br> [30,40)   :  0 %","<b> floor_area_sqm_bin <\/b><br> [30,40)   :  0.29 %","<b> floor_area_sqm_bin <\/b><br> [30,40)   :  0.05 %"],"hoverinfo":["text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(248,142,103,1)","line":{"color":"rgba(248,142,103,1)"}},"textfont":{"color":"rgba(248,142,103,1)"},"error_y":{"color":"rgba(248,142,103,1)"},"error_x":{"color":"rgba(248,142,103,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","5"],"y":[0.027782448666928236,0.0006210648048999871,0.026086795868974819,0.0081831707720284343],"text":["<b> floor_area_sqm_bin <\/b><br> [40,50)   :  2.78 %","<b> floor_area_sqm_bin <\/b><br> [40,50)   :  0.06 %","<b> floor_area_sqm_bin <\/b><br> [40,50)   :  2.61 %","<b> floor_area_sqm_bin <\/b><br> [40,50)   :  0.82 %"],"hoverinfo":["text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","3","5"],"y":[0.0015507351979522823,0.078408188150091457,0.00061993717969912384],"text":["<b> floor_area_sqm_bin <\/b><br> [50,60)   :  0.16 %","<b> floor_area_sqm_bin <\/b><br> [50,60)   :  7.84 %","<b> floor_area_sqm_bin <\/b><br> [50,60)   :  0.06 %"],"hoverinfo":["text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(178,156,177,1)","line":{"color":"rgba(178,156,177,1)"}},"textfont":{"color":"rgba(178,156,177,1)"},"error_y":{"color":"rgba(178,156,177,1)"},"error_x":{"color":"rgba(178,156,177,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","3","4","5"],"y":[0.094594847075089208,0.58266669130009052,0.00021654822135165462,0.10935691849892544],"text":["<b> floor_area_sqm_bin <\/b><br> [60,70)   :  9.46 %","<b> floor_area_sqm_bin <\/b><br> [60,70)   :  58.27 %","<b> floor_area_sqm_bin <\/b><br> [60,70)   :  0.02 %","<b> floor_area_sqm_bin <\/b><br> [60,70)   :  10.94 %"],"hoverinfo":["text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(152,158,202,1)","line":{"color":"rgba(152,158,202,1)"}},"textfont":{"color":"rgba(152,158,202,1)"},"error_y":{"color":"rgba(152,158,202,1)"},"error_x":{"color":"rgba(152,158,202,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0074173719709283862,0.00025699233306206366,0.22846268960038429,0.0040553575998582593,0.018763431972226813],"text":["<b> floor_area_sqm_bin <\/b><br> [70,80)   :  0.74 %","<b> floor_area_sqm_bin <\/b><br> [70,80)   :  0.03 %","<b> floor_area_sqm_bin <\/b><br> [70,80)   :  22.85 %","<b> floor_area_sqm_bin <\/b><br> [70,80)   :  0.41 %","<b> floor_area_sqm_bin <\/b><br> [70,80)   :  1.88 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(185,152,199,1)","line":{"color":"rgba(185,152,199,1)"}},"textfont":{"color":"rgba(185,152,199,1)"},"error_y":{"color":"rgba(185,152,199,1)"},"error_x":{"color":"rgba(185,152,199,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.035573491769893315,0.001499121942862038,0.076080329595211257,0.17837667578794023,0.059927260704248635],"text":["<b> floor_area_sqm_bin <\/b><br> [80,90)   :  3.56 %","<b> floor_area_sqm_bin <\/b><br> [80,90)   :  0.15 %","<b> floor_area_sqm_bin <\/b><br> [80,90)   :  7.61 %","<b> floor_area_sqm_bin <\/b><br> [80,90)   :  17.84 %","<b> floor_area_sqm_bin <\/b><br> [80,90)   :  5.99 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.4246211908898978,0.00079239302694136295,0.0040275648013006447,0.2729688761147312,0.51392792197057369],"text":["<b> floor_area_sqm_bin <\/b><br> [90,100)  :  42.46 %","<b> floor_area_sqm_bin <\/b><br> [90,100)  :  0.08 %","<b> floor_area_sqm_bin <\/b><br> [90,100)  :  0.4 %","<b> floor_area_sqm_bin <\/b><br> [90,100)  :  27.3 %","<b> floor_area_sqm_bin <\/b><br> [90,100)  :  51.39 %"],"hoverinfo":["text","text","text","text","text"],"name":"floor_area_sqm_bin","type":"bar","marker":{"color":"rgba(224,152,180,1)","line":{"color":"rgba(224,152,180,1)"}},"textfont":{"color":"rgba(224,152,180,1)"},"error_y":{"color":"rgba(224,152,180,1)"},"error_x":{"color":"rgba(224,152,180,1)"},"xaxis":"x5","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.014339299110491909,0.23612984277717219,0.016319861409138336],"text":["<b> lease_commence_date_bin <\/b><br> [1.97e+03,1.98e+03) :  1.43 %","<b> lease_commence_date_bin <\/b><br> [1.97e+03,1.98e+03) :  23.61 %","<b> lease_commence_date_bin <\/b><br> [1.97e+03,1.98e+03) :  1.63 %"],"hoverinfo":["text","text","text"],"name":"lease_commence_date_bin","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x6","yaxis":"y","frame":null},{"x":["2","3","4","5"],"y":[0.19845675704640445,0.6269514290465017,0.37606551568005986,0.0038052492926139137],"text":["<b> lease_commence_date_bin <\/b><br> [1.98e+03,1.99e+03) :  19.85 %","<b> lease_commence_date_bin <\/b><br> [1.98e+03,1.99e+03) :  62.7 %","<b> lease_commence_date_bin <\/b><br> [1.98e+03,1.99e+03) :  37.61 %","<b> lease_commence_date_bin <\/b><br> [1.98e+03,1.99e+03) :  0.38 %"],"hoverinfo":["text","text","text","text"],"name":"lease_commence_date_bin","type":"bar","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x6","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.0034248023339393681,0.38064516129032255,0.13411051785615313,0.4040592948402465,0.007317787101180603],"text":["<b> lease_commence_date_bin <\/b><br> [1.99e+03,2e+03)    :  0.34 %","<b> lease_commence_date_bin <\/b><br> [1.99e+03,2e+03)    :  38.06 %","<b> lease_commence_date_bin <\/b><br> [1.99e+03,2e+03)    :  13.41 %","<b> lease_commence_date_bin <\/b><br> [1.99e+03,2e+03)    :  40.41 %","<b> lease_commence_date_bin <\/b><br> [1.99e+03,2e+03)    :  0.73 %"],"hoverinfo":["text","text","text","text","text"],"name":"lease_commence_date_bin","type":"bar","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x6","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.47959917128239821,0.019783517307898402,9.2375339479372587e-05,0.00053152745240860684,0.61840179529710215],"text":["<b> lease_commence_date_bin <\/b><br> [2.01e+03,2.02e+03] :  47.96 %","<b> lease_commence_date_bin <\/b><br> [2.01e+03,2.02e+03] :  1.98 %","<b> lease_commence_date_bin <\/b><br> [2.01e+03,2.02e+03] :  0.01 %","<b> lease_commence_date_bin <\/b><br> [2.01e+03,2.02e+03] :  0.05 %","<b> lease_commence_date_bin <\/b><br> [2.01e+03,2.02e+03] :  61.84 %"],"hoverinfo":["text","text","text","text","text"],"name":"lease_commence_date_bin","type":"bar","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x6","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.51697602638366247,0.38677526524488265,0.002715834980693554,0.20302380061814673,0.37047516830910332],"text":["<b> lease_commence_date_bin <\/b><br> [2e+03,2.01e+03)    :  51.7 %","<b> lease_commence_date_bin <\/b><br> [2e+03,2.01e+03)    :  38.68 %","<b> lease_commence_date_bin <\/b><br> [2e+03,2.01e+03)    :  0.27 %","<b> lease_commence_date_bin <\/b><br> [2e+03,2.01e+03)    :  20.3 %","<b> lease_commence_date_bin <\/b><br> [2e+03,2.01e+03)    :  37.05 %"],"hoverinfo":["text","text","text","text","text"],"name":"lease_commence_date_bin","type":"bar","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x6","yaxis":"y","frame":null},{"x":["2","3","4"],"y":[0.00080274234140414818,0.056810833779814142,0.00019686201941059511],"text":["<b> remaining_lease_bin <\/b><br> [40,50) :  0.08 %","<b> remaining_lease_bin <\/b><br> [40,50) :  5.68 %","<b> remaining_lease_bin <\/b><br> [40,50) :  0.02 %"],"hoverinfo":["text","text","text"],"name":"remaining_lease_bin","type":"bar","marker":{"color":"rgba(205,180,144,1)","line":{"color":"rgba(205,180,144,1)"}},"textfont":{"color":"rgba(205,180,144,1)"},"error_y":{"color":"rgba(205,180,144,1)"},"error_x":{"color":"rgba(205,180,144,1)"},"xaxis":"x7","yaxis":"y","frame":null},{"x":["2","3","4","5"],"y":[0.060748069079232837,0.35645795998300295,0.084178199499970477,0.0013165318788790671],"text":["<b> remaining_lease_bin <\/b><br> [50,60) :  6.07 %","<b> remaining_lease_bin <\/b><br> [50,60) :  35.65 %","<b> remaining_lease_bin <\/b><br> [50,60) :  8.42 %","<b> remaining_lease_bin <\/b><br> [50,60) :  0.13 %"],"hoverinfo":["text","text","text","text"],"name":"remaining_lease_bin","type":"bar","marker":{"color":"rgba(202,217,72,1)","line":{"color":"rgba(202,217,72,1)"}},"textfont":{"color":"rgba(202,217,72,1)"},"error_y":{"color":"rgba(202,217,72,1)"},"error_x":{"color":"rgba(202,217,72,1)"},"xaxis":"x7","yaxis":"y","frame":null},{"x":["2","3","4","5"],"y":[0.27900720298533366,0.49941803536127993,0.45870819142862768,0.007899191273274403],"text":["<b> remaining_lease_bin <\/b><br> [60,70) :  27.9 %","<b> remaining_lease_bin <\/b><br> [60,70) :  49.94 %","<b> remaining_lease_bin <\/b><br> [60,70) :  45.87 %","<b> remaining_lease_bin <\/b><br> [60,70) :  0.79 %"],"hoverinfo":["text","text","text","text"],"name":"remaining_lease_bin","type":"bar","marker":{"color":"rgba(250,212,80,1)","line":{"color":"rgba(250,212,80,1)"}},"textfont":{"color":"rgba(250,212,80,1)"},"error_y":{"color":"rgba(250,212,80,1)"},"error_x":{"color":"rgba(250,212,80,1)"},"xaxis":"x7","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.16746698679471789,0.46196736960860885,0.085668889833170142,0.38173514183908497,0.1549746097423359],"text":["<b> remaining_lease_bin <\/b><br> [70,80) :  16.75 %","<b> remaining_lease_bin <\/b><br> [70,80) :  46.2 %","<b> remaining_lease_bin <\/b><br> [70,80) :  8.57 %","<b> remaining_lease_bin <\/b><br> [70,80) :  38.17 %","<b> remaining_lease_bin <\/b><br> [70,80) :  15.5 %"],"hoverinfo":["text","text","text","text","text"],"name":"remaining_lease_bin","type":"bar","marker":{"color":"rgba(223,194,152,1)","line":{"color":"rgba(223,194,152,1)"}},"textfont":{"color":"rgba(223,194,152,1)"},"error_y":{"color":"rgba(223,194,152,1)"},"error_x":{"color":"rgba(223,194,152,1)"},"xaxis":"x7","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.83253301320528206,0.19747461598542046,0.0016442810427328321,0.075181605212906275,0.83580966710551063],"text":["<b> remaining_lease_bin <\/b><br> [80,90] :  83.25 %","<b> remaining_lease_bin <\/b><br> [80,90] :  19.75 %","<b> remaining_lease_bin <\/b><br> [80,90] :  0.16 %","<b> remaining_lease_bin <\/b><br> [80,90] :  7.52 %","<b> remaining_lease_bin <\/b><br> [80,90] :  83.58 %"],"hoverinfo":["text","text","text","text","text"],"name":"remaining_lease_bin","type":"bar","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x7","yaxis":"y","frame":null},{"x":["1","3","4","5"],"y":[0.0067558642033552869,0.052284442145324884,1.9770660340055357e-05,0.00096116878123798542],"text":["<b> resale_price_bin <\/b><br> [1.4e+05,2.4e+05) :  0.68 %","<b> resale_price_bin <\/b><br> [1.4e+05,2.4e+05) :  5.23 %","<b> resale_price_bin <\/b><br> [1.4e+05,2.4e+05) :  0 %","<b> resale_price_bin <\/b><br> [1.4e+05,2.4e+05) :  0.1 %"],"hoverinfo":["text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x8","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.073106753977090447,0.0016125926639068066,0.58279601677536164,0.11419533412415975,0.019031141868512111],"text":["<b> resale_price_bin <\/b><br> [2.4e+05,3.4e+05) :  7.31 %","<b> resale_price_bin <\/b><br> [2.4e+05,3.4e+05) :  0.16 %","<b> resale_price_bin <\/b><br> [2.4e+05,3.4e+05) :  58.28 %","<b> resale_price_bin <\/b><br> [2.4e+05,3.4e+05) :  11.42 %","<b> resale_price_bin <\/b><br> [2.4e+05,3.4e+05) :  1.9 %"],"hoverinfo":["text","text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x8","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.38816025362797457,0.089823818234331373,0.33022336357086113,0.46862396204033213,0.15018262206843522],"text":["<b> resale_price_bin <\/b><br> [3.4e+05,4.4e+05) :  38.82 %","<b> resale_price_bin <\/b><br> [3.4e+05,4.4e+05) :  8.98 %","<b> resale_price_bin <\/b><br> [3.4e+05,4.4e+05) :  33.02 %","<b> resale_price_bin <\/b><br> [3.4e+05,4.4e+05) :  46.86 %","<b> resale_price_bin <\/b><br> [3.4e+05,4.4e+05) :  15.02 %"],"hoverinfo":["text","text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x8","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.33873676662074692,0.31279483970347549,0.031296765015611433,0.30642546461051801,0.31540753556324491],"text":["<b> resale_price_bin <\/b><br> [4.4e+05,5.4e+05) :  33.87 %","<b> resale_price_bin <\/b><br> [4.4e+05,5.4e+05) :  31.28 %","<b> resale_price_bin <\/b><br> [4.4e+05,5.4e+05) :  3.13 %","<b> resale_price_bin <\/b><br> [4.4e+05,5.4e+05) :  30.64 %","<b> resale_price_bin <\/b><br> [4.4e+05,5.4e+05) :  31.54 %"],"hoverinfo":["text","text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x8","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.13781585552263592,0.35780302300953115,0.0029929609991316717,0.087445630684064843,0.27835447904652055],"text":["<b> resale_price_bin <\/b><br> [5.4e+05,6.4e+05) :  13.78 %","<b> resale_price_bin <\/b><br> [5.4e+05,6.4e+05) :  35.78 %","<b> resale_price_bin <\/b><br> [5.4e+05,6.4e+05) :  0.3 %","<b> resale_price_bin <\/b><br> [5.4e+05,6.4e+05) :  8.74 %","<b> resale_price_bin <\/b><br> [5.4e+05,6.4e+05) :  27.84 %"],"hoverinfo":["text","text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x8","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.055424506048196862,0.23796572638875518,0.0004064514937092394,0.023289837880585213,0.23606305267204922],"text":["<b> resale_price_bin <\/b><br> [6.4e+05,7.4e+05] :  5.54 %","<b> resale_price_bin <\/b><br> [6.4e+05,7.4e+05] :  23.8 %","<b> resale_price_bin <\/b><br> [6.4e+05,7.4e+05] :  0.04 %","<b> resale_price_bin <\/b><br> [6.4e+05,7.4e+05] :  2.33 %","<b> resale_price_bin <\/b><br> [6.4e+05,7.4e+05] :  23.61 %"],"hoverinfo":["text","text","text","text","text"],"name":"resale_price_bin","type":"bar","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"xaxis":"x8","yaxis":"y","frame":null}],"layout":{"xaxis":{"domain":[0,0.105],"automargin":true,"title":"town","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis2":{"domain":[0.14499999999999999,0.23000000000000001],"automargin":true,"title":"flat_type","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis3":{"domain":[0.27000000000000002,0.35499999999999998],"automargin":true,"title":"storey_range","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis4":{"domain":[0.39500000000000002,0.47999999999999998],"automargin":true,"title":"flat_model","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis5":{"domain":[0.52000000000000002,0.60499999999999998],"automargin":true,"title":"floor_area_sqm_bin","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis6":{"domain":[0.64500000000000002,0.72999999999999998],"automargin":true,"title":"lease_commence_date_bin","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis7":{"domain":[0.77000000000000002,0.85499999999999998],"automargin":true,"title":"remaining_lease_bin","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"xaxis8":{"domain":[0.89500000000000002,1],"automargin":true,"title":"resale_price_bin","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"],"anchor":"y"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion","anchor":"x"},"annotations":[],"shapes":[],"images":[],"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Cluster Composition","barmode":"stack","showlegend":false,"hovermode":"x unified","font":{"size":8}},"attrs":{"3844149167bb":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"town","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"3844440e65d4":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"flat_type","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"384473b56a2a":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"storey_range","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"384479713ad3":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"flat_model","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"3844137633e4":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"floor_area_sqm_bin","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"38441185420f":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"lease_commence_date_bin","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"384419b729":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"remaining_lease_bin","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"384442dc1fe0":{"x":{},"y":{},"text":{},"hoverinfo":"text","name":"resale_price_bin","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="cluster-charactistic-individual" class="level4">
+<h4 class="anchored" data-anchor-id="cluster-charactistic-individual">Cluster Charactistic Individual</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Calculate the count of each town in each cluster</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>data_count <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">group_by</span>(km_cluster, flat_type) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co"># Calculate the proportion of each town in each cluster</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>data_prop <span class="ot">&lt;-</span> data_count <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a>  <span class="fu">group_by</span>(km_cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="fu">mutate</span>(<span class="at">proportion =</span> count <span class="sc">/</span> <span class="fu">sum</span>(count))</span>
+<span id="cb17-10"><a href="#cb17-10"></a></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co"># Create an interactive stacked bar plot</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="fu">plot_ly</span>(data_prop, <span class="at">x =</span> <span class="sc">~</span><span class="fu">factor</span>(km_cluster), <span class="at">y =</span> <span class="sc">~</span>proportion, <span class="at">color =</span> <span class="sc">~</span>flat_type, </span>
+<span id="cb17-13"><a href="#cb17-13"></a>        <span class="at">type =</span> <span class="st">"bar"</span>, <span class="at">text =</span> <span class="sc">~</span><span class="fu">paste0</span>(flat_type, <span class="st">": "</span>, <span class="fu">round</span>(proportion <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%"</span>),</span>
+<span id="cb17-14"><a href="#cb17-14"></a>        <span class="at">hoverinfo =</span> <span class="st">"text"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"Proportion of Towns in Each Cluster"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Cluster"</span>),</span>
+<span id="cb17-17"><a href="#cb17-17"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"Proportion"</span>),</span>
+<span id="cb17-18"><a href="#cb17-18"></a>         <span class="at">barmode =</span> <span class="st">"stack"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">"Town"</span>)),</span>
+<span id="cb17-20"><a href="#cb17-20"></a>         <span class="at">hovermode =</span> <span class="st">"x unified"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-21"><a href="#cb17-21"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">TRUE</span>, <span class="at">modeBarButtonsToRemove =</span> <span class="fu">c</span>(<span class="st">"sendDataToCloud"</span>, <span class="st">"lasso2d"</span>, <span class="st">"select2d"</span>, <span class="st">"autoScale2d"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-86995b134d31bfce8f19" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-86995b134d31bfce8f19">{"x":{"visdat":{"38446b26844":["function () ","plotlyVisDat"]},"cur_data":"38446b26844","attrs":{"38446b26844":{"x":{},"y":{},"text":{},"hoverinfo":"text","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of Towns in Each Cluster","xaxis":{"domain":[0,1],"automargin":true,"title":"Cluster","type":"category","categoryorder":"array","categoryarray":["1","2","3","4","5"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion"},"barmode":"stack","legend":{"title":{"text":"Town"}},"hovermode":"x unified","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":true,"modeBarButtonsToRemove":["sendDataToCloud","lasso2d","select2d","autoScale2d"]},"data":[{"x":["3"],"y":[0.0019029319932750753],"text":"1 ROOM: 0.19%","hoverinfo":"text","type":"bar","name":"1 ROOM","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","5"],"y":[0.031052071072249315,0.00064246707356247997,0.03079793818242282,0.0093403868408001318],"text":["2 ROOM: 3.11%","2 ROOM: 0.06%","2 ROOM: 3.08%","2 ROOM: 0.93%"],"hoverinfo":["text","text","text","text"],"type":"bar","name":"2 ROOM","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.1021243203856286,0.0024627904486561728,0.93714781901823485,0.0072642085162509598,0.12026781286163002],"text":["3 ROOM: 10.21%","3 ROOM: 0.25%","3 ROOM: 93.71%","3 ROOM: 0.73%","3 ROOM: 12.03%"],"hoverinfo":["text","text","text","text","text"],"type":"bar","name":"3 ROOM","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.53201427423724379,0.0011136095941749653,0.02887653112125187,0.99246018465657426,0.65572821954041993],"text":["4 ROOM: 53.2%","4 ROOM: 0.11%","4 ROOM: 2.89%","4 ROOM: 99.25%","4 ROOM: 65.57%"],"hoverinfo":["text","text","text","text","text"],"type":"bar","name":"4 ROOM","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1","2","3","4","5"],"y":[0.3348093343048783,0.65842167255594819,0.0012747796848153418,0.00027560682717483315,0.21433294759464375],"text":["5 ROOM: 33.48%","5 ROOM: 65.84%","5 ROOM: 0.13%","5 ROOM: 0.03%","5 ROOM: 21.43%"],"hoverinfo":["text","text","text","text","text"],"type":"bar","name":"5 ROOM","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2","5"],"y":[0.33624585073348323,0.00033063316250619935],"text":["EXECUTIVE: 33.62%","EXECUTIVE: 0.03%"],"hoverinfo":["text","text"],"type":"bar","name":"EXECUTIVE","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2"],"y":[0.0011136095941749653],"text":"MULTI-GENERATION: 0.11%","hoverinfo":"text","type":"bar","name":"MULTI-GENERATION","marker":{"color":"rgba(229,196,148,1)","line":{"color":"rgba(229,196,148,1)"}},"textfont":{"color":"rgba(229,196,148,1)"},"error_y":{"color":"rgba(229,196,148,1)"},"error_x":{"color":"rgba(229,196,148,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+<section id="ui-design" class="level1">
+<h1>6 UI design</h1>
+<p>In Shiny app, this part will be designed as follows:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cluster1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cluster2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cluster3.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cluster4.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../EDA/EDA.html" class="pagination-link  aria-label=" exploratory="" data="" analysis"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Exploratory Data Analysis</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
