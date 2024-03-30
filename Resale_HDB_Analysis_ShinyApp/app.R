@@ -12,7 +12,7 @@ ui <- dashboardPage(
   skin = "blue",
   dashboardHeader(
     title = "Resale HDB Analysis",
-    titleWidth = 300
+    titleWidth = 200
   ),
   dashboardSidebar(
     sidebarMenu(
@@ -35,6 +35,11 @@ ui <- dashboardPage(
         "Resale Price Prediction",
         tabName = "prediction",
         icon = icon("dollar-sign")  
+      ),
+      menuItem(
+        "User Guide",
+        tabName = "guide",
+        icon = icon("book")  
       )
     )
   ),
@@ -403,8 +408,15 @@ ui <- dashboardPage(
                  )
           )
         )
+      ),
+      tabItem(
+        tabName = "guide",
+        fluidRow(
+          column(width = 12,
+                 img(src = "images/User_guide.png", width = "100%", height = "auto")
+          )
+        )
       )
-      
     )
   )
 )
