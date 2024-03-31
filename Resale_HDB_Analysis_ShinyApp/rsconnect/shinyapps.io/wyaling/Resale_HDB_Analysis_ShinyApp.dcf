@@ -5,7 +5,7 @@ account: wyaling
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11581484
-bundleId: 8435748
+bundleId: 8436632
 url: https://wyaling.shinyapps.io/Resale_HDB_Analysis_ShinyApp/
 version: 1
 asMultiple: FALSE
